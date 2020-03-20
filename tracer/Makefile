@@ -1,5 +1,5 @@
 
-.PHONY: test clean build run
+.PHONY: test clean build run repl
 
 test:
 	cabal v2-test --test-show-details='always'
@@ -13,3 +13,6 @@ build:
 
 run:
 	cabal v2-run tracer
+
+repl:
+	cabal v2-repl
