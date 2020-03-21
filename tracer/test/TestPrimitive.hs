@@ -52,20 +52,125 @@ testIsPoint =
                      (isPoint p) (True))
            ,TestCase (assertEqual "Is not point"
                      (isPoint v) (False))
+           ,TestCase (assertEqual "Is not point 2"
+                     (isPoint e) (False))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
+    e = makeErr
 testIsVector :: Test
 testIsVector =
   TestList [TestCase (assertEqual "Is not vector"
                      (isVector p) (False))
            ,TestCase (assertEqual "Is vector"
                      (isVector v) (True))
+           ,TestCase (assertEqual "Is not vector 2"
+                     (isVector e) (False))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
+    e = makeErr
+testIsErr :: Test
+testIsErr =
+  TestList [TestCase (assertEqual "Is not error"
+                     (isErr p) (False))
+           ,TestCase (assertEqual "Is not error 2"
+                     (isErr v) (False))
+           ,TestCase (assertEqual "Is error"
+                     (isErr e) (True))
+           ]
+  where
+    p = makePoint 3 2 1
+    v = makeVector 1 2 3
+    e = makeErr
+testIsValid :: Test
+testIsValid =
+  TestList [TestCase (assertEqual "Is valid"
+                     (isValid p) (True))
+           ,TestCase (assertEqual "Is valid 2"
+                     (isValid v) (True))
+           ,TestCase (assertEqual "Is not valid"
+                     (isValid e) (False))
+           ]
+  where
+    p = makePoint 3 2 1
+    v = makeVector 1 2 3
+    e = makeErr
+
+testAddPrimitives :: Test
+testAddPrimitives =
+  TestList [TestCase (assertEqual "Vector + Vector"
+                     (addPrimitives v v) (Primitive 2 4 6 0))
+           ,TestCase (assertEqual "Vector + Point"
+                     (addPrimitives v p) (Primitive 4 4 4 1))
+           ,TestCase (assertEqual "Point + Vector"
+                     (addPrimitives p v) (Primitive 4 4 4 1))
+           ,TestCase (assertEqual "Point + Point"
+                     (isErr $ addPrimitives p p) (True))
+           ]
+  where
+    p = makePoint 3 2 1
+    v = makeVector 1 2 3
+
+testSubPrimitives :: Test
+testSubPrimitives =
+  TestList [TestCase (assertEqual "vector - vector"
+                     (subPrimitives v v) (Primitive 0 0 0 0))
+           ,TestCase (assertEqual "vector - point"
+                     (isErr $ subPrimitives v p) (True))
+           ,TestCase (assertEqual "point - vector"
+                     (subPrimitives p v) (Primitive 2 0 (-2) 1))
+           ,TestCase (assertEqual "point - point"
+                     (subPrimitives p p) (Primitive 0 0 0 0))
+           ]
+  where
+    p = makePoint 3 2 1
+    v = makeVector 1 2 3
+
+testMultPrimitive :: Test
+testMultPrimitive =
+  TestList [TestCase (assertEqual "Positive Vector"
+                     (multPrimitive 10 v) (Primitive 10 20 30 0))
+           ,TestCase (assertEqual "Negative Vector"
+                     (multPrimitive (-5) v) (Primitive (-5) (-10) (-15) 0))
+           ,TestCase (assertEqual "Zero Vector"
+                     (multPrimitive 0 v) (Primitive 0 0 0 0))
+           ,TestCase (assertEqual "Positive Point"
+                     (multPrimitive 10 p) (Primitive 30 20 10 1))
+           ,TestCase (assertEqual "Negative Point"
+                     (multPrimitive (-5) p) (Primitive (-15) (-10) (-5) 1))
+           ,TestCase (assertEqual "Zero Point"
+                     (multPrimitive 0 p) (Primitive 0 0 0 1))
+           ]
+  where
+    p = makePoint 3 2 1
+    v = makeVector 1 2 3
+
+testDividePrimitive :: Test
+testDividePrimitive =
+  TestList [TestCase (assertEqual "Vector"
+                     (dividePrimitive 2 v) (Primitive 5 10 15 0))
+           ,TestCase (assertEqual "Point"
+                     (dividePrimitive 5 p) (Primitive 6 4 2 1))
+           ]
+  where
+    p = makePoint 30 20 10
+    v = makeVector 10 20 30
+
+testNegatePrimitive :: Test
+testNegatePrimitive =
+  TestList [TestCase (assertEqual "Vector"
+                     (negatePrimitive v) (Primitive (-10) (-20) (-30) 0))
+           ,TestCase (assertEqual "Point"
+                     (negatePrimitive p) (Primitive (-30) (-20) (-10) 1))
+           ,TestCase (assertEqual "Self inverting"
+                     (negatePrimitive $ negatePrimitive p) (p))
+           ]
+  where
+    p = makePoint 30 20 10
+    v = makeVector 10 20 30
 
 primitiveTests :: [Test]
 primitiveTests = [testMakePoint
@@ -75,4 +180,9 @@ primitiveTests = [testMakePoint
                  ,testGetZ
                  ,testIsPoint
                  ,testIsVector
+                 ,testAddPrimitives
+                 ,testSubPrimitives
+                 ,testMultPrimitive
+                 ,testDividePrimitive
+                 ,testNegatePrimitive
                  ]
