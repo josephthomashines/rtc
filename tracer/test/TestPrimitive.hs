@@ -99,120 +99,120 @@ testIsValid =
     v = makeVector 1 2 3
     e = makeErr
 
-testAddPrimitives :: Test
-testAddPrimitives =
+testAddP :: Test
+testAddP =
   TestList [TestCase (assertEqual "Vector + Vector"
-                     (v `addP` v) (Primitive 2 4 6 0))
+                     (addP v v) (Primitive 2 4 6 0))
            ,TestCase (assertEqual "Vector + Point"
-                     (v `addP` p) (Primitive 4 4 4 1))
+                     (addP v p) (Primitive 4 4 4 1))
            ,TestCase (assertEqual "Point + Vector"
-                     (p `addP` v) (Primitive 4 4 4 1))
+                     (addP p v) (Primitive 4 4 4 1))
            ,TestCase (assertEqual "Point + Point"
-                     (isErr $ p `addP` p) (True))
+                     (isErr $ addP p p) (True))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testSubPrimitives :: Test
-testSubPrimitives =
+testSubP :: Test
+testSubP =
   TestList [TestCase (assertEqual "vector - vector"
-                     (subPrimitives v v) (Primitive 0 0 0 0))
+                     (subP v v) (Primitive 0 0 0 0))
            ,TestCase (assertEqual "vector - point"
-                     (isErr $ subPrimitives v p) (True))
+                     (isErr $ subP v p) (True))
            ,TestCase (assertEqual "point - vector"
-                     (subPrimitives p v) (Primitive 2 0 (-2) 1))
+                     (subP p v) (Primitive 2 0 (-2) 1))
            ,TestCase (assertEqual "point - point"
-                     (subPrimitives p p) (Primitive 0 0 0 0))
+                     (subP p p) (Primitive 0 0 0 0))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testMultPrimitive :: Test
-testMultPrimitive =
+testScaleP :: Test
+testScaleP =
   TestList [TestCase (assertEqual "Positive Vector"
-                     (multPrimitive 10 v) (Primitive 10 20 30 0))
+                     (scaleP 10 v) (Primitive 10 20 30 0))
            ,TestCase (assertEqual "Negative Vector"
-                     (multPrimitive (-5) v) (Primitive (-5) (-10) (-15) 0))
+                     (scaleP (-5) v) (Primitive (-5) (-10) (-15) 0))
            ,TestCase (assertEqual "Zero Vector"
-                     (multPrimitive 0 v) (Primitive 0 0 0 0))
+                     (scaleP 0 v) (Primitive 0 0 0 0))
            ,TestCase (assertEqual "Positive Point"
-                     (multPrimitive 10 p) (Primitive 30 20 10 1))
+                     (scaleP 10 p) (Primitive 30 20 10 1))
            ,TestCase (assertEqual "Negative Point"
-                     (multPrimitive (-5) p) (Primitive (-15) (-10) (-5) 1))
+                     (scaleP (-5) p) (Primitive (-15) (-10) (-5) 1))
            ,TestCase (assertEqual "Zero Point"
-                     (multPrimitive 0 p) (Primitive 0 0 0 1))
+                     (scaleP 0 p) (Primitive 0 0 0 1))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testDividePrimitive :: Test
-testDividePrimitive =
+testDivP :: Test
+testDivP =
   TestList [TestCase (assertEqual "Vector"
-                     (dividePrimitive 2 v) (Primitive 5 10 15 0))
+                     (divP 2 v) (Primitive 5 10 15 0))
            ,TestCase (assertEqual "Point"
-                     (dividePrimitive 5 p) (Primitive 6 4 2 1))
+                     (divP 5 p) (Primitive 6 4 2 1))
            ]
   where
     p = makePoint 30 20 10
     v = makeVector 10 20 30
 
-testNegatePrimitive :: Test
-testNegatePrimitive =
+testNegP :: Test
+testNegP =
   TestList [TestCase (assertEqual "Vector"
-                     (negatePrimitive v) (Primitive (-10) (-20) (-30) 0))
+                     (negP v) (Primitive (-10) (-20) (-30) 0))
            ,TestCase (assertEqual "Point"
-                     (negatePrimitive p) (Primitive (-30) (-20) (-10) 1))
+                     (negP p) (Primitive (-30) (-20) (-10) 1))
            ,TestCase (assertEqual "Self inverting"
-                     (negatePrimitive $ negatePrimitive p) (p))
+                     (negP $ negP p) (p))
            ]
   where
     p = makePoint 30 20 10
     v = makeVector 10 20 30
 
-testMagnitudePrimitive :: Test
-testMagnitudePrimitive =
+testMagnitudeP :: Test
+testMagnitudeP =
   TestList [TestCase (assertEqual "Positive"
-                     (magnitudePrimitive $ makeVector 2 4 6) (2 * (sqrt 14)))
+                     (magnitudeP $ makeVector 2 4 6) (2 * (sqrt 14)))
            ,TestCase (assertEqual "Negative"
-                     (magnitudePrimitive $ makeVector (-2) (-4) (-6)) (2 * (sqrt 14)))
+                     (magnitudeP $ makeVector (-2) (-4) (-6)) (2 * (sqrt 14)))
            ]
 
-testNormalizePrimitive :: Test
-testNormalizePrimitive =
+testNormalizeP :: Test
+testNormalizeP =
   TestList [TestCase (assertEqual "Positive"
-                     (normalizePrimitive $ makeVector 4 2 (sqrt 5))
+                     (normalizeP $ makeVector 4 2 (sqrt 5))
                      (makeVector (4/5) (2/5) ((sqrt 5) / 5)))
            ,TestCase (assertEqual "Negative"
-                     (normalizePrimitive $ makeVector (-4) (-2) (sqrt 5))
+                     (normalizeP $ makeVector (-4) (-2) (sqrt 5))
                      (makeVector ((-4)/5) ((-2)/5) ((sqrt 5) / 5)))
            ,TestCase (assertEqual "One"
-                     (normalizePrimitive $ makeVector 0 1 0)
+                     (normalizeP $ makeVector 0 1 0)
                      (makeVector 0 1 0))
            ]
 
-testDotPrimitive :: Test
-testDotPrimitive =
+testDotP :: Test
+testDotP =
   TestList [TestCase (assertEqual "Positive"
-                     (dotPrimitive a b) (32))
+                     (dotP a b) (32))
            ,TestCase (assertEqual "Negative"
-                     (dotPrimitive a c) (-2))
+                     (dotP a c) (-2))
            ,TestCase (assertEqual "Order invariant"
-                     (dotPrimitive a b) (dotPrimitive b a))
+                     (dotP a b) (dotP b a))
            ]
   where
     a = makeVector 1 2 3
     b = makeVector 4 5 6
     c = makeVector (-3) 2 (-1)
 
-testCrossPrimitive :: Test
-testCrossPrimitive =
+testCrossP :: Test
+testCrossP =
   TestList [TestCase (assertEqual "Positive"
-                     (crossPrimitive a b) (makeVector (-4) (8) (-4)))
+                     (crossP a b) (makeVector (-4) (8) (-4)))
            ,TestCase (assertEqual "Negative"
-                     (crossPrimitive a c) (makeVector (-8) (-8) (8)))
+                     (crossP a c) (makeVector (-8) (-8) (8)))
            ]
   where
     a = makeVector 1 2 3
@@ -227,13 +227,13 @@ primitiveTests = [testMakePoint
                  ,testGetZ
                  ,testIsPoint
                  ,testIsVector
-                 ,testAddPrimitives
-                 ,testSubPrimitives
-                 ,testMultPrimitive
-                 ,testDividePrimitive
-                 ,testNegatePrimitive
-                 ,testMagnitudePrimitive
-                 ,testNormalizePrimitive
-                 ,testDotPrimitive
-                 ,testCrossPrimitive
+                 ,testAddP
+                 ,testSubP
+                 ,testScaleP
+                 ,testDivP
+                 ,testNegP
+                 ,testMagnitudeP
+                 ,testNormalizeP
+                 ,testDotP
+                 ,testCrossP
                  ]

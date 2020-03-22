@@ -48,53 +48,51 @@ isVector (Primitive _ _ _ w)
   | otherwise   = False
 isErr :: Primitive -> Bool
 isErr (Primitive _ _ _ w)
-  | w == err  = True
-  | otherwise = False
+  | w /= point && w /= vector      = True
+  | otherwise                      = False
 isValid :: Primitive -> Bool
 isValid = not . isErr
 
 -- Addition of Primitives, not allowed to add two points
 addP :: Primitive -> Primitive -> Primitive
-(Primitive ax ay az aw) `addP` (Primitive bx by bz bw)
-  | aw+bw < 2    = (Primitive (ax+bx) (ay+by) (az+bz) (aw+bw))
-  | otherwise     = makeErr
+addP (Primitive ax ay az aw) (Primitive bx by bz bw) =
+  (Primitive (ax+bx) (ay+by) (az+bz) (aw+bw))
 
 -- Subtraction of Primitives, not allowed to do vector - point
-subPrimitives :: Primitive -> Primitive -> Primitive
-subPrimitives (Primitive ax ay az aw) (Primitive bx by bz bw)
-  | aw >= bw      = (Primitive (ax-bx) (ay-by) (az-bz) (aw-bw))
-  | otherwise     = makeErr
+subP :: Primitive -> Primitive -> Primitive
+subP (Primitive ax ay az aw) (Primitive bx by bz bw) =
+  (Primitive (ax-bx) (ay-by) (az-bz) (aw-bw))
 
 -- Scale a primitive
-multPrimitive :: Float -> Primitive -> Primitive
-multPrimitive s (Primitive x y z w) =
+scaleP :: Float -> Primitive -> Primitive
+scaleP s (Primitive x y z w) =
   (Primitive (s*x) (s*y) (s*z) w)
 
-dividePrimitive :: Float -> Primitive -> Primitive
-dividePrimitive s p = multPrimitive (1.0/s) p
+divP :: Float -> Primitive -> Primitive
+divP s p = scaleP (1.0/s) p
 
-negatePrimitive :: Primitive -> Primitive
-negatePrimitive p = multPrimitive (-1) p
+negP :: Primitive -> Primitive
+negP p = scaleP (-1) p
 
 -- Using Pythagorean's Theorem, get magnitude
-magnitudePrimitive :: Primitive -> Float
-magnitudePrimitive (Primitive x y z _) =
+magnitudeP :: Primitive -> Float
+magnitudeP (Primitive x y z _) =
   sqrt $ x**2 + y**2 + z**2
 
 -- Reduce the primitive to unit magnitude
-normalizePrimitive :: Primitive -> Primitive
-normalizePrimitive p =
-  dividePrimitive m p
+normalizeP :: Primitive -> Primitive
+normalizeP p =
+  divP m p
   where
-    m = magnitudePrimitive p
+    m = magnitudeP p
 
 -- Calculate the dot product
-dotPrimitive :: Primitive -> Primitive -> Float
-dotPrimitive (Primitive ax ay az _) (Primitive bx by bz _) =
+dotP :: Primitive -> Primitive -> Float
+dotP (Primitive ax ay az _) (Primitive bx by bz _) =
   (ax*bx) + (ay*by) + (az*bz)
 
-crossPrimitive :: Primitive -> Primitive -> Primitive
-crossPrimitive (Primitive ax ay az _) (Primitive bx by bz _) =
+crossP :: Primitive -> Primitive -> Primitive
+crossP (Primitive ax ay az _) (Primitive bx by bz _) =
   makeVector x y z
   where
     x = (ay*bz) - (az*by)
