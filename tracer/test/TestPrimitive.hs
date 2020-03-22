@@ -210,8 +210,14 @@ testDotPrimitive =
 testCrossPrimitive :: Test
 testCrossPrimitive =
   TestList [TestCase (assertEqual "Positive"
-                     (1) (1))
+                     (crossPrimitive a b) (makeVector (-4) (8) (-4)))
+           ,TestCase (assertEqual "Negative"
+                     (crossPrimitive a c) (makeVector (-8) (-8) (8)))
            ]
+  where
+    a = makeVector 1 2 3
+    b = makeVector 3 2 1
+    c = makeVector (-3) 2 (-1)
 
 primitiveTests :: [Test]
 primitiveTests = [testMakePoint
