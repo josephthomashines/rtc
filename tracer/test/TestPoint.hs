@@ -1,18 +1,18 @@
-module TestPrimitive where
+module TestPoint where
 
 import Test.HUnit
-import Primitive
+import Point
 
 testMakePoint :: Test
 testMakePoint =
   TestList [TestCase (assertEqual "Make point"
-                     (makePoint 1 2 3) (Primitive 1.0 2.0 3.0 1.0))
+                     (makePoint 1 2 3) (Point 1.0 2.0 3.0 1.0))
            ]
 
 testMakeVector :: Test
 testMakeVector =
   TestList [TestCase (assertEqual "Make vector"
-                     (makeVector 1 2 3) (Primitive 1.0 2.0 3.0 0.0))
+                     (makeVector 1 2 3) (Point 1.0 2.0 3.0 0.0))
            ]
 
 testGetX :: Test
@@ -102,11 +102,11 @@ testIsValid =
 testAddP :: Test
 testAddP =
   TestList [TestCase (assertEqual "Vector + Vector"
-                     (addP v v) (Primitive 2 4 6 0))
+                     (addP v v) (Point 2 4 6 0))
            ,TestCase (assertEqual "Vector + Point"
-                     (addP v p) (Primitive 4 4 4 1))
+                     (addP v p) (Point 4 4 4 1))
            ,TestCase (assertEqual "Point + Vector"
-                     (addP p v) (Primitive 4 4 4 1))
+                     (addP p v) (Point 4 4 4 1))
            ,TestCase (assertEqual "Point + Point"
                      (isErr $ addP p p) (True))
            ]
@@ -117,13 +117,13 @@ testAddP =
 testSubP :: Test
 testSubP =
   TestList [TestCase (assertEqual "vector - vector"
-                     (subP v v) (Primitive 0 0 0 0))
+                     (subP v v) (Point 0 0 0 0))
            ,TestCase (assertEqual "vector - point"
                      (isErr $ subP v p) (True))
            ,TestCase (assertEqual "point - vector"
-                     (subP p v) (Primitive 2 0 (-2) 1))
+                     (subP p v) (Point 2 0 (-2) 1))
            ,TestCase (assertEqual "point - point"
-                     (subP p p) (Primitive 0 0 0 0))
+                     (subP p p) (Point 0 0 0 0))
            ]
   where
     p = makePoint 3 2 1
@@ -132,17 +132,17 @@ testSubP =
 testScaleP :: Test
 testScaleP =
   TestList [TestCase (assertEqual "Positive Vector"
-                     (scaleP 10 v) (Primitive 10 20 30 0))
+                     (scaleP 10 v) (Point 10 20 30 0))
            ,TestCase (assertEqual "Negative Vector"
-                     (scaleP (-5) v) (Primitive (-5) (-10) (-15) 0))
+                     (scaleP (-5) v) (Point (-5) (-10) (-15) 0))
            ,TestCase (assertEqual "Zero Vector"
-                     (scaleP 0 v) (Primitive 0 0 0 0))
+                     (scaleP 0 v) (Point 0 0 0 0))
            ,TestCase (assertEqual "Positive Point"
-                     (scaleP 10 p) (Primitive 30 20 10 1))
+                     (scaleP 10 p) (Point 30 20 10 1))
            ,TestCase (assertEqual "Negative Point"
-                     (scaleP (-5) p) (Primitive (-15) (-10) (-5) 1))
+                     (scaleP (-5) p) (Point (-15) (-10) (-5) 1))
            ,TestCase (assertEqual "Zero Point"
-                     (scaleP 0 p) (Primitive 0 0 0 1))
+                     (scaleP 0 p) (Point 0 0 0 1))
            ]
   where
     p = makePoint 3 2 1
@@ -151,9 +151,9 @@ testScaleP =
 testDivP :: Test
 testDivP =
   TestList [TestCase (assertEqual "Vector"
-                     (divP 2 v) (Primitive 5 10 15 0))
+                     (divP 2 v) (Point 5 10 15 0))
            ,TestCase (assertEqual "Point"
-                     (divP 5 p) (Primitive 6 4 2 1))
+                     (divP 5 p) (Point 6 4 2 1))
            ]
   where
     p = makePoint 30 20 10
@@ -162,9 +162,9 @@ testDivP =
 testNegP :: Test
 testNegP =
   TestList [TestCase (assertEqual "Vector"
-                     (negP v) (Primitive (-10) (-20) (-30) 0))
+                     (negP v) (Point (-10) (-20) (-30) 0))
            ,TestCase (assertEqual "Point"
-                     (negP p) (Primitive (-30) (-20) (-10) 1))
+                     (negP p) (Point (-30) (-20) (-10) 1))
            ,TestCase (assertEqual "Self inverting"
                      (negP $ negP p) (p))
            ]
