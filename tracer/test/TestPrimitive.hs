@@ -102,13 +102,13 @@ testIsValid =
 testAddPrimitives :: Test
 testAddPrimitives =
   TestList [TestCase (assertEqual "Vector + Vector"
-                     (addPrimitives v v) (Primitive 2 4 6 0))
+                     (v `addP` v) (Primitive 2 4 6 0))
            ,TestCase (assertEqual "Vector + Point"
-                     (addPrimitives v p) (Primitive 4 4 4 1))
+                     (v `addP` p) (Primitive 4 4 4 1))
            ,TestCase (assertEqual "Point + Vector"
-                     (addPrimitives p v) (Primitive 4 4 4 1))
+                     (p `addP` v) (Primitive 4 4 4 1))
            ,TestCase (assertEqual "Point + Point"
-                     (isErr $ addPrimitives p p) (True))
+                     (isErr $ p `addP` p) (True))
            ]
   where
     p = makePoint 3 2 1

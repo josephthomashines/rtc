@@ -54,8 +54,8 @@ isValid :: Primitive -> Bool
 isValid = not . isErr
 
 -- Addition of Primitives, not allowed to add two points
-addPrimitives :: Primitive -> Primitive -> Primitive
-addPrimitives (Primitive ax ay az aw) (Primitive bx by bz bw)
+addP :: Primitive -> Primitive -> Primitive
+(Primitive ax ay az aw) `addP` (Primitive bx by bz bw)
   | aw+bw < 2    = (Primitive (ax+bx) (ay+by) (az+bz) (aw+bw))
   | otherwise     = makeErr
 
