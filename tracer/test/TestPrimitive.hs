@@ -196,8 +196,16 @@ testNormalizePrimitive =
 testDotPrimitive :: Test
 testDotPrimitive =
   TestList [TestCase (assertEqual "Positive"
-                     (1) (1))
+                     (dotPrimitive a b) (32))
+           ,TestCase (assertEqual "Negative"
+                     (dotPrimitive a c) (-2))
+           ,TestCase (assertEqual "Order invariant"
+                     (dotPrimitive a b) (dotPrimitive b a))
            ]
+  where
+    a = makeVector 1 2 3
+    b = makeVector 4 5 6
+    c = makeVector (-3) 2 (-1)
 
 testCrossPrimitive :: Test
 testCrossPrimitive =
