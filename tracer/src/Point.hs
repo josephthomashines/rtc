@@ -1,6 +1,5 @@
 module Point where
 
-
 -- Types of Points
 point = 1.0
 vector = 0.0
@@ -49,45 +48,48 @@ isValid :: Point -> Bool
 isValid = not . isErr
 
 -- Addition of Points, not allowed to add two points
-addP :: Point -> Point -> Point
-addP (Point ax ay az aw) (Point bx by bz bw) =
+addPoint :: Point -> Point -> Point
+addPoint (Point ax ay az aw) (Point bx by bz bw) =
   (Point (ax+bx) (ay+by) (az+bz) (aw+bw))
 
 -- Subtraction of Points, not allowed to do vector - point
-subP :: Point -> Point -> Point
-subP (Point ax ay az aw) (Point bx by bz bw) =
+subPoint :: Point -> Point -> Point
+subPoint (Point ax ay az aw) (Point bx by bz bw) =
   (Point (ax-bx) (ay-by) (az-bz) (aw-bw))
 
--- Scale a primitive
-scaleP :: Float -> Point -> Point
-scaleP s (Point x y z w) =
+-- Scale a point
+scalePoint :: Float -> Point -> Point
+scalePoint s (Point x y z w) =
   (Point (s*x) (s*y) (s*z) w)
 
-divP :: Float -> Point -> Point
-divP s p = scaleP (1.0/s) p
+-- Divide point
+divPoint :: Float -> Point -> Point
+divPoint s p = scalePoint (1.0/s) p
 
-negP :: Point -> Point
-negP p = scaleP (-1) p
+-- Negate point
+negPoint :: Point -> Point
+negPoint p = scalePoint (-1) p
 
 -- Using Pythagorean's Theorem, get magnitude
-magnitudeP :: Point -> Float
-magnitudeP (Point x y z _) =
+magnitudePoint :: Point -> Float
+magnitudePoint (Point x y z _) =
   sqrt $ x**2 + y**2 + z**2
 
--- Reduce the primitive to unit magnitude
-normalizeP :: Point -> Point
-normalizeP p =
-  divP m p
+-- Reduce the point to unit magnitude
+normalizePoint :: Point -> Point
+normalizePoint p =
+  divPoint m p
   where
-    m = magnitudeP p
+    m = magnitudePoint p
 
--- Calculate the dot product
-dotP :: Point -> Point -> Float
-dotP (Point ax ay az _) (Point bx by bz _) =
+-- Dot product
+dotPoint :: Point -> Point -> Float
+dotPoint (Point ax ay az _) (Point bx by bz _) =
   (ax*bx) + (ay*by) + (az*bz)
 
-crossP :: Point -> Point -> Point
-crossP (Point ax ay az _) (Point bx by bz _) =
+-- Cross product
+crossPoint :: Point -> Point -> Point
+crossPoint (Point ax ay az _) (Point bx by bz _) =
   makeVector x y z
   where
     x = (ay*bz) - (az*by)
@@ -108,8 +110,8 @@ data Environment = Environment {gravity :: Point
 tick :: Environment -> Projectile -> Projectile
 tick e p = Projectile np nv
   where
-    np = addP (position p) (velocity p)
-    nv = addP (velocity p) $ addP (gravity e) (wind e)
+    np = addPoint (position p) (velocity p)
+    nv = addPoint (velocity p) $ addPoint (gravity e) (wind e)
 
 launchCore :: Environment -> Projectile -> Int -> String
 launchCore e p c
@@ -129,5 +131,7 @@ launch :: Environment -> Projectile -> IO ()
 launch e p = putStrLn $ launchCore e p 0
 
 demoEnv = Environment (makeVector 0 (-9.8) 0) (makeVector 0 0 0)
-demoProj = Projectile (makePoint 100 100 100) (makeVector 50 20 50)
+demoProj = Projectile (makePoint 100 100 100) (makeVector 100 200 (-5))
 
+demoPoint :: IO()
+demoPoint = launch demoEnv demoProj

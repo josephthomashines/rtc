@@ -3,11 +3,11 @@ module Main where
 import Test.HUnit
 import System.Exit
 
-import TestPrimitive (primitiveTests)
+import TestPoint (pointTests)
 
 tests :: Test
 tests = TestList $ []
-                 ++ primitiveTests
+                 ++ pointTests
 
 main :: IO Counts
 main = do

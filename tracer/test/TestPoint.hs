@@ -58,7 +58,7 @@ testIsPoint =
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
-    e = makeErr
+    e = Point 0 0 0 2
 testIsVector :: Test
 testIsVector =
   TestList [TestCase (assertEqual "Is not vector"
@@ -71,7 +71,7 @@ testIsVector =
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
-    e = makeErr
+    e = Point 0 0 0 2
 testIsErr :: Test
 testIsErr =
   TestList [TestCase (assertEqual "Is not error"
@@ -84,7 +84,7 @@ testIsErr =
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
-    e = makeErr
+    e = Point 0 0 0 2
 testIsValid :: Test
 testIsValid =
   TestList [TestCase (assertEqual "Is valid"
@@ -97,143 +97,143 @@ testIsValid =
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
-    e = makeErr
+    e = Point 0 0 0 2
 
-testAddP :: Test
-testAddP =
+testAddPoint :: Test
+testAddPoint =
   TestList [TestCase (assertEqual "Vector + Vector"
-                     (addP v v) (Point 2 4 6 0))
+                     (addPoint v v) (Point 2 4 6 0))
            ,TestCase (assertEqual "Vector + Point"
-                     (addP v p) (Point 4 4 4 1))
+                     (addPoint v p) (Point 4 4 4 1))
            ,TestCase (assertEqual "Point + Vector"
-                     (addP p v) (Point 4 4 4 1))
+                     (addPoint p v) (Point 4 4 4 1))
            ,TestCase (assertEqual "Point + Point"
-                     (isErr $ addP p p) (True))
+                     (isErr $ addPoint p p) (True))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testSubP :: Test
-testSubP =
+testSubPoint :: Test
+testSubPoint =
   TestList [TestCase (assertEqual "vector - vector"
-                     (subP v v) (Point 0 0 0 0))
+                     (subPoint v v) (Point 0 0 0 0))
            ,TestCase (assertEqual "vector - point"
-                     (isErr $ subP v p) (True))
+                     (isErr $ subPoint v p) (True))
            ,TestCase (assertEqual "point - vector"
-                     (subP p v) (Point 2 0 (-2) 1))
+                     (subPoint p v) (Point 2 0 (-2) 1))
            ,TestCase (assertEqual "point - point"
-                     (subP p p) (Point 0 0 0 0))
+                     (subPoint p p) (Point 0 0 0 0))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testScaleP :: Test
-testScaleP =
+testScalePoint :: Test
+testScalePoint =
   TestList [TestCase (assertEqual "Positive Vector"
-                     (scaleP 10 v) (Point 10 20 30 0))
+                     (scalePoint 10 v) (Point 10 20 30 0))
            ,TestCase (assertEqual "Negative Vector"
-                     (scaleP (-5) v) (Point (-5) (-10) (-15) 0))
+                     (scalePoint (-5) v) (Point (-5) (-10) (-15) 0))
            ,TestCase (assertEqual "Zero Vector"
-                     (scaleP 0 v) (Point 0 0 0 0))
+                     (scalePoint 0 v) (Point 0 0 0 0))
            ,TestCase (assertEqual "Positive Point"
-                     (scaleP 10 p) (Point 30 20 10 1))
+                     (scalePoint 10 p) (Point 30 20 10 1))
            ,TestCase (assertEqual "Negative Point"
-                     (scaleP (-5) p) (Point (-15) (-10) (-5) 1))
+                     (scalePoint (-5) p) (Point (-15) (-10) (-5) 1))
            ,TestCase (assertEqual "Zero Point"
-                     (scaleP 0 p) (Point 0 0 0 1))
+                     (scalePoint 0 p) (Point 0 0 0 1))
            ]
   where
     p = makePoint 3 2 1
     v = makeVector 1 2 3
 
-testDivP :: Test
-testDivP =
+testDivPoint :: Test
+testDivPoint =
   TestList [TestCase (assertEqual "Vector"
-                     (divP 2 v) (Point 5 10 15 0))
+                     (divPoint 2 v) (Point 5 10 15 0))
            ,TestCase (assertEqual "Point"
-                     (divP 5 p) (Point 6 4 2 1))
+                     (divPoint 5 p) (Point 6 4 2 1))
            ]
   where
     p = makePoint 30 20 10
     v = makeVector 10 20 30
 
-testNegP :: Test
-testNegP =
+testNegPoint :: Test
+testNegPoint =
   TestList [TestCase (assertEqual "Vector"
-                     (negP v) (Point (-10) (-20) (-30) 0))
+                     (negPoint v) (Point (-10) (-20) (-30) 0))
            ,TestCase (assertEqual "Point"
-                     (negP p) (Point (-30) (-20) (-10) 1))
+                     (negPoint p) (Point (-30) (-20) (-10) 1))
            ,TestCase (assertEqual "Self inverting"
-                     (negP $ negP p) (p))
+                     (negPoint $ negPoint p) (p))
            ]
   where
     p = makePoint 30 20 10
     v = makeVector 10 20 30
 
-testMagnitudeP :: Test
-testMagnitudeP =
+testMagnitudePoint :: Test
+testMagnitudePoint =
   TestList [TestCase (assertEqual "Positive"
-                     (magnitudeP $ makeVector 2 4 6) (2 * (sqrt 14)))
+                     (magnitudePoint $ makeVector 2 4 6) (2 * (sqrt 14)))
            ,TestCase (assertEqual "Negative"
-                     (magnitudeP $ makeVector (-2) (-4) (-6)) (2 * (sqrt 14)))
+                     (magnitudePoint $ makeVector (-2) (-4) (-6)) (2 * (sqrt 14)))
            ]
 
-testNormalizeP :: Test
-testNormalizeP =
+testNormalizePoint :: Test
+testNormalizePoint =
   TestList [TestCase (assertEqual "Positive"
-                     (normalizeP $ makeVector 4 2 (sqrt 5))
+                     (normalizePoint $ makeVector 4 2 (sqrt 5))
                      (makeVector (4/5) (2/5) ((sqrt 5) / 5)))
            ,TestCase (assertEqual "Negative"
-                     (normalizeP $ makeVector (-4) (-2) (sqrt 5))
+                     (normalizePoint $ makeVector (-4) (-2) (sqrt 5))
                      (makeVector ((-4)/5) ((-2)/5) ((sqrt 5) / 5)))
            ,TestCase (assertEqual "One"
-                     (normalizeP $ makeVector 0 1 0)
+                     (normalizePoint $ makeVector 0 1 0)
                      (makeVector 0 1 0))
            ]
 
-testDotP :: Test
-testDotP =
+testDotPoint :: Test
+testDotPoint =
   TestList [TestCase (assertEqual "Positive"
-                     (dotP a b) (32))
+                     (dotPoint a b) (32))
            ,TestCase (assertEqual "Negative"
-                     (dotP a c) (-2))
+                     (dotPoint a c) (-2))
            ,TestCase (assertEqual "Order invariant"
-                     (dotP a b) (dotP b a))
+                     (dotPoint a b) (dotPoint b a))
            ]
   where
     a = makeVector 1 2 3
     b = makeVector 4 5 6
     c = makeVector (-3) 2 (-1)
 
-testCrossP :: Test
-testCrossP =
+testCrossPoint :: Test
+testCrossPoint =
   TestList [TestCase (assertEqual "Positive"
-                     (crossP a b) (makeVector (-4) (8) (-4)))
+                     (crossPoint a b) (makeVector (-4) (8) (-4)))
            ,TestCase (assertEqual "Negative"
-                     (crossP a c) (makeVector (-8) (-8) (8)))
+                     (crossPoint a c) (makeVector (-8) (-8) (8)))
            ]
   where
     a = makeVector 1 2 3
     b = makeVector 3 2 1
     c = makeVector (-3) 2 (-1)
 
-primitiveTests :: [Test]
-primitiveTests = [testMakePoint
-                 ,testMakeVector
-                 ,testGetX
-                 ,testGetY
-                 ,testGetZ
-                 ,testIsPoint
-                 ,testIsVector
-                 ,testAddP
-                 ,testSubP
-                 ,testScaleP
-                 ,testDivP
-                 ,testNegP
-                 ,testMagnitudeP
-                 ,testNormalizeP
-                 ,testDotP
-                 ,testCrossP
-                 ]
+pointTests :: [Test]
+pointTests = [testMakePoint
+             ,testMakeVector
+             ,testGetX
+             ,testGetY
+             ,testGetZ
+             ,testIsPoint
+             ,testIsVector
+             ,testAddPoint
+             ,testSubPoint
+             ,testScalePoint
+             ,testDivPoint
+             ,testNegPoint
+             ,testMagnitudePoint
+             ,testNormalizePoint
+             ,testDotPoint
+             ,testCrossPoint
+             ]
