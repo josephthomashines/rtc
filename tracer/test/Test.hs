@@ -3,14 +3,16 @@ module Main where
 import Test.HUnit
 import System.Exit
 
+import TestCanvas (canvasTest)
 import TestColor (colorTests)
 import TestPoint (pointTests)
 import TestUtil (utilTests)
 
 tests :: Test
 tests = TestList $ []
-                 ++ pointTests
+                 ++ canvasTest
                  ++ colorTests
+                 ++ pointTests
                  ++ utilTests
 
 main :: IO Counts
