@@ -1,13 +1,29 @@
 module Primitive where
 
--- Basic tuple based data type
-data Primitive = Primitive Float Float Float Float
-  deriving (Show, Eq)
 
 -- Types of Primitives
 point = 1.0
 vector = 0.0
-err = -1.0
+err = 2.0
+
+-- Basic tuple based data type
+data Primitive = Primitive {x :: Float
+                           ,y :: Float
+                           ,z :: Float
+                           ,w :: Float
+                           }
+  deriving (Show)
+
+-- Rough float equal
+floatEqual :: Float -> Float -> Bool
+floatEqual a b = (abs $ a - b) <= 1E-7
+
+instance Eq Primitive where
+  a == b =
+    (floatEqual (x a) (x b)) &&
+    (floatEqual (y a) (y b)) &&
+    (floatEqual (z a) (z b)) &&
+    (floatEqual (w a) (w b))
 
 -- Take x,y,z and return Point
 makePoint :: Float -> Float -> Float -> Primitive
@@ -20,14 +36,6 @@ makeVector x y z = Primitive x y z vector
 -- Return a primitive with the error value
 makeErr :: Primitive
 makeErr = Primitive 0 0 0 err
-
--- Accessors
-getX :: Primitive -> Float
-getX (Primitive x _ _ _) = x
-getY :: Primitive -> Float
-getY (Primitive _ y _ _) = y
-getZ :: Primitive -> Float
-getZ (Primitive _ _ z _) = z
 
 -- Figure out the type of a Primitive
 isPoint :: Primitive -> Bool
@@ -48,7 +56,7 @@ isValid = not . isErr
 -- Addition of Primitives, not allowed to add two points
 addPrimitives :: Primitive -> Primitive -> Primitive
 addPrimitives (Primitive ax ay az aw) (Primitive bx by bz bw)
-  | aw+bw /= 2    = (Primitive (ax+bx) (ay+by) (az+bz) (aw+bw))
+  | aw+bw < 2    = (Primitive (ax+bx) (ay+by) (az+bz) (aw+bw))
   | otherwise     = makeErr
 
 -- Subtraction of Primitives, not allowed to do vector - point
@@ -57,12 +65,38 @@ subPrimitives (Primitive ax ay az aw) (Primitive bx by bz bw)
   | aw >= bw      = (Primitive (ax-bx) (ay-by) (az-bz) (aw-bw))
   | otherwise     = makeErr
 
+-- Scale a primitive
 multPrimitive :: Float -> Primitive -> Primitive
 multPrimitive s (Primitive x y z w) =
   (Primitive (s*x) (s*y) (s*z) w)
 
 dividePrimitive :: Float -> Primitive -> Primitive
-dividePrimitive s p = multPrimitive (1/s) p
+dividePrimitive s p = multPrimitive (1.0/s) p
 
 negatePrimitive :: Primitive -> Primitive
 negatePrimitive p = multPrimitive (-1) p
+
+-- Using Pythagorean's Theorem, get magnitude
+magnitudePrimitive :: Primitive -> Float
+magnitudePrimitive (Primitive x y z _) =
+  sqrt $ x**2 + y**2 + z**2
+
+-- Reduce the primitive to unit magnitude
+normalizePrimitive :: Primitive -> Primitive
+normalizePrimitive p =
+  dividePrimitive m p
+  where
+    m = magnitudePrimitive p
+
+-- Calculate the dot product
+dotPrimitive :: Primitive -> Primitive -> Float
+dotPrimitive (Primitive ax ay az _) (Primitive bx by bz _) =
+  (ax*bx) + (ay*by) + (az*bz)
+
+crossPrimitive :: Primitive -> Primitive -> Primitive
+crossPrimitive (Primitive ax ay az _) (Primitive bx by bz _) =
+  makeVector x y z
+  where
+    x = (ay*bz) - (az*by)
+    y = (az*bx) - (ax*bz)
+    z = (ax*by) - (ay*bx)

@@ -18,9 +18,9 @@ testMakeVector =
 testGetX :: Test
 testGetX =
   TestList [TestCase (assertEqual "Get x from point"
-                     (getX p) (3))
+                     (x p) (3))
            ,TestCase (assertEqual "Get x from vector"
-                     (getX v) (1))
+                     (x v) (1))
            ]
   where
     p = makePoint 3 2 1
@@ -28,9 +28,9 @@ testGetX =
 testGetY :: Test
 testGetY =
   TestList [TestCase (assertEqual "Get y from point"
-                     (getY p) (2))
+                     (y p) (2))
            ,TestCase (assertEqual "Get y from vector"
-                     (getY v) (2))
+                     (y v) (2))
            ]
   where
     p = makePoint 3 2 1
@@ -38,9 +38,9 @@ testGetY =
 testGetZ :: Test
 testGetZ =
   TestList [TestCase (assertEqual "Get z from point"
-                     (getZ p) (1))
+                     (z p) (1))
            ,TestCase (assertEqual "Get z from vector"
-                     (getZ v) (3))
+                     (z v) (3))
            ]
   where
     p = makePoint 3 2 1
@@ -172,6 +172,39 @@ testNegatePrimitive =
     p = makePoint 30 20 10
     v = makeVector 10 20 30
 
+testMagnitudePrimitive :: Test
+testMagnitudePrimitive =
+  TestList [TestCase (assertEqual "Positive"
+                     (magnitudePrimitive $ makeVector 2 4 6) (2 * (sqrt 14)))
+           ,TestCase (assertEqual "Negative"
+                     (magnitudePrimitive $ makeVector (-2) (-4) (-6)) (2 * (sqrt 14)))
+           ]
+
+testNormalizePrimitive :: Test
+testNormalizePrimitive =
+  TestList [TestCase (assertEqual "Positive"
+                     (normalizePrimitive $ makeVector 4 2 (sqrt 5))
+                     (makeVector (4/5) (2/5) ((sqrt 5) / 5)))
+           ,TestCase (assertEqual "Negative"
+                     (normalizePrimitive $ makeVector (-4) (-2) (sqrt 5))
+                     (makeVector ((-4)/5) ((-2)/5) ((sqrt 5) / 5)))
+           ,TestCase (assertEqual "One"
+                     (normalizePrimitive $ makeVector 0 1 0)
+                     (makeVector 0 1 0))
+           ]
+
+testDotPrimitive :: Test
+testDotPrimitive =
+  TestList [TestCase (assertEqual "Positive"
+                     (1) (1))
+           ]
+
+testCrossPrimitive :: Test
+testCrossPrimitive =
+  TestList [TestCase (assertEqual "Positive"
+                     (1) (1))
+           ]
+
 primitiveTests :: [Test]
 primitiveTests = [testMakePoint
                  ,testMakeVector
@@ -185,4 +218,8 @@ primitiveTests = [testMakePoint
                  ,testMultPrimitive
                  ,testDividePrimitive
                  ,testNegatePrimitive
+                 ,testMagnitudePrimitive
+                 ,testNormalizePrimitive
+                 ,testDotPrimitive
+                 ,testCrossPrimitive
                  ]
