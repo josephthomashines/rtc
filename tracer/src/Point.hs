@@ -1,5 +1,7 @@
 module Point where
 
+import Util (floatEqual)
+
 -- Types of Points
 point = 1.0
 vector = 0.0
@@ -12,16 +14,11 @@ data Point = Point {x :: Float
                    }
   deriving (Show)
 
--- Rough float equal
-floatEqual :: Float -> Float -> Bool
-floatEqual a b = (abs $ a - b) <= 1E-7
-
 instance Eq Point where
-  a == b =
-    (floatEqual (x a) (x b)) &&
-    (floatEqual (y a) (y b)) &&
-    (floatEqual (z a) (z b)) &&
-    (floatEqual (w a) (w b))
+  a == b = (floatEqual (x a) (x b))
+        && (floatEqual (y a) (y b))
+        && (floatEqual (z a) (z b))
+        && (floatEqual (w a) (w b))
 
 -- Take x,y,z and return Point
 makePoint :: Float -> Float -> Float -> Point
@@ -48,13 +45,13 @@ isValid :: Point -> Bool
 isValid = not . isErr
 
 -- Addition of Points, not allowed to add two points
-addPoint :: Point -> Point -> Point
-addPoint (Point ax ay az aw) (Point bx by bz bw) =
+addPoints :: Point -> Point -> Point
+addPoints (Point ax ay az aw) (Point bx by bz bw) =
   (Point (ax+bx) (ay+by) (az+bz) (aw+bw))
 
 -- Subtraction of Points, not allowed to do vector - point
-subPoint :: Point -> Point -> Point
-subPoint (Point ax ay az aw) (Point bx by bz bw) =
+subPoints :: Point -> Point -> Point
+subPoints (Point ax ay az aw) (Point bx by bz bw) =
   (Point (ax-bx) (ay-by) (az-bz) (aw-bw))
 
 -- Scale a point
@@ -83,13 +80,13 @@ normalizePoint p =
     m = magnitudePoint p
 
 -- Dot product
-dotPoint :: Point -> Point -> Float
-dotPoint (Point ax ay az _) (Point bx by bz _) =
+dotPoints :: Point -> Point -> Float
+dotPoints (Point ax ay az _) (Point bx by bz _) =
   (ax*bx) + (ay*by) + (az*bz)
 
 -- Cross product
-crossPoint :: Point -> Point -> Point
-crossPoint (Point ax ay az _) (Point bx by bz _) =
+crossPoints :: Point -> Point -> Point
+crossPoints (Point ax ay az _) (Point bx by bz _) =
   makeVector x y z
   where
     x = (ay*bz) - (az*by)
@@ -110,8 +107,8 @@ data Environment = Environment {gravity :: Point
 tick :: Environment -> Projectile -> Projectile
 tick e p = Projectile np nv
   where
-    np = addPoint (position p) (velocity p)
-    nv = addPoint (velocity p) $ addPoint (gravity e) (wind e)
+    np = addPoints (position p) (velocity p)
+    nv = addPoints (velocity p) $ addPoints (gravity e) (wind e)
 
 launchCore :: Environment -> Projectile -> Int -> String
 launchCore e p c
