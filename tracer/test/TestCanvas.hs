@@ -30,6 +30,17 @@ testWritePixel =
     red = Color 1 0 0
     nc = writePixel 2 3 red c
 
+testToPPM :: Test
+testToPPM =
+  TestList [TestCase (assertEqual "Header"
+                     (unlines $ take 3 $ lines $ toPPM c)
+                     ("P3\n5 3\n255\n"))
+           ,TestCase (assertEqual ""
+                     (1) (1))
+           ]
+  where
+    c = makeCanvas 5 3
+
 canvasTest :: [Test]
 canvasTest = [testMakeCanvas
              ,testWritePixel

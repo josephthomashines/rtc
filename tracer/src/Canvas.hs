@@ -44,5 +44,20 @@ writePixel x y co ca = Canvas w h newPxs
     sp = tail $ snd pxsSplit
     newPxs = fp++[newRow]++sp
 
+toPPM :: Canvas -> String
+toPPM c = header ++ body
+  where
+    version = "P3"
+    dimensions = (show $ width c) ++ " " ++ (show $ height c)
+    maxColor = "255"
+    header = unlines $ [version,dimensions,maxColor]
+    convertColor co = nr ++ " " ++ ng ++ " " ++ nb ++ " "
+      where
+        nc = scaleColor 255 co
+        nr = show . round $ r nc
+        ng = show . round $ g nc
+        nb = show . round $ b nc
+    pxs = pixels c
+    body = unlines $ map (concat . map convertColor) pxs
 
 
