@@ -19,12 +19,14 @@ extra-source-files:  CHANGELOG.md
 
 library
   exposed-modules:     Tracer
-                     , Point
-                     , Color
-                     , Util
                      , Canvas
-  other-modules:       DemoPoint
-                     , DemoCanvas
+                     , Color
+                     , Matrix
+                     , Point
+                     , Util
+  other-modules:       DemoCanvas
+                     , DemoPoint
+  -- extensions:          TypeSynonymInstances
   build-depends:       base >=4.13 && <4.14
   hs-source-dirs:      src
                      , demo
@@ -39,10 +41,11 @@ executable tracer
 
 test-suite tracer-tests
   type:                exitcode-stdio-1.0
-  other-modules:       TestPoint
+  other-modules:       TestCanvas
                      , TestColor
+                     , TestMatrix
+                     , TestPoint
                      , TestUtil
-                     , TestCanvas
   build-depends:       base >=4.13 && <5
                      , tracer
                      , HUnit
