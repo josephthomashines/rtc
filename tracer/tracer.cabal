@@ -23,9 +23,11 @@ library
                      , Color
                      , Util
                      , Canvas
-  extensions:          DuplicateRecordFields
+  other-modules:       DemoPoint
+                     , DemoCanvas
   build-depends:       base >=4.13 && <4.14
   hs-source-dirs:      src
+                     , demo
   default-language:    Haskell2010
 
 executable tracer

@@ -5,14 +5,14 @@ test:
 	cabal v2-test --test-show-details='always'
 
 clean:
-	cabal clean
 	cabal v2-clean
+	-@rm -rfv *.ppm
 
 build:
 	cabal v2-build
 
 run:
-	cabal v2-run tracer
+	cabal v2-run tracer -- $(ARGS)
 
 repl:
 	cabal v2-repl

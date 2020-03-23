@@ -6,9 +6,13 @@ import Util
 testFloatEqual :: Test
 testFloatEqual =
   TestList [TestCase (assertEqual "Should equal"
-                     (floatEqual 1.0 1.000001) (True))
+                     (True)
+                     (floatEqual 1.0 1.000001)
+                     )
            ,TestCase (assertEqual "Should not equal"
-                     (floatEqual 1.0 1.001) (False))
+                     (False)
+                     (floatEqual 1.0 1.001)
+                     )
            ]
 
 utilTests :: [Test]

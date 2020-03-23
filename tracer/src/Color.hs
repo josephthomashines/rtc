@@ -15,9 +15,13 @@ instance Eq Color where
           && (floatEqual (g c1) (g c2))
           && (floatEqual (b c1) (b c2))
 
+-- Make color, keep consistent interface
+makeColor :: Float -> Float -> Float -> Color
+makeColor r g b = Color r g b
+
 -- Add colors
 addColors :: Color -> Color -> Color
-addColors c1 c2 = Color nr ng nb
+addColors c1 c2 = makeColor nr ng nb
   where
     nr = (r c1) + (r c2)
     ng = (g c1) + (g c2)
@@ -25,7 +29,7 @@ addColors c1 c2 = Color nr ng nb
 
 -- Subtract colors
 subColors :: Color -> Color -> Color
-subColors c1 c2 = Color nr ng nb
+subColors c1 c2 = makeColor nr ng nb
   where
     nr = (r c1) - (r c2)
     ng = (g c1) - (g c2)
@@ -33,7 +37,7 @@ subColors c1 c2 = Color nr ng nb
 
 -- Multiply (blend) colors
 multColors :: Color -> Color -> Color
-multColors c1 c2 = Color nr ng nb
+multColors c1 c2 = makeColor nr ng nb
   where
     nr = (r c1) * (r c2)
     ng = (g c1) * (g c2)
@@ -41,7 +45,7 @@ multColors c1 c2 = Color nr ng nb
 
 -- Scale color
 scaleColor :: Float -> Color -> Color
-scaleColor s c = Color nr ng nb
+scaleColor s c = makeColor nr ng nb
   where
     nr = s * (r c)
     ng = s * (g c)

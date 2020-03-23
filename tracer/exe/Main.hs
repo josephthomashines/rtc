@@ -1,7 +1,11 @@
 module Main where
 
 import System.Environment
-import Tracer
+import System.Exit
 
-main = mapM_ (putStrLn . trace) =<< getArgs
+import Tracer (parse)
+
+-- Main that passes the args to the parse function
+main = getArgs >>= parse >>= putStr . tac
+tac  = unlines . reverse . lines
 
