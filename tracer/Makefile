@@ -9,7 +9,7 @@ clean:
 	-@rm -rfv *.ppm
 
 build:
-	cabal v2-build
+	cabal v2-build --enable-tests
 
 run:
 	cabal v2-run tracer -- $(ARGS)
