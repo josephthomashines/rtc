@@ -23,6 +23,7 @@ library
                      , Color
                      , Matrix
                      , Point
+                     , Transform
                      , Util
   other-modules:       DemoCanvas
                      , DemoPoint
@@ -45,6 +46,7 @@ test-suite tracer-tests
                      , TestColor
                      , TestMatrix
                      , TestPoint
+                     , TestTransform
                      , TestUtil
   build-depends:       base >=4.13 && <5
                      , tracer
