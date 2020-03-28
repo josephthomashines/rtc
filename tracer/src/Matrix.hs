@@ -4,7 +4,8 @@ import Data.List
 
 import Point
 import Util (floatEqual
-            ,removeN)
+            ,removeN
+            ,chunkList)
 
 -- Matrix is a 2D list
 type Matrix = [[Float]]
@@ -113,6 +114,19 @@ matrixCofactor row col m
     minor = matrixMinor row col m
 
 -- Tests to see if a matrix is invertible
-matrixInvertible :: Matrix -> Bool
-matrixInvertible m =
+isMatrixInvertible :: Matrix -> Bool
+isMatrixInvertible m =
   matrixDeterminant m /= 0
+
+-- Get the inverse of the matrix, if it has one
+matrixInverse :: Matrix -> Matrix
+matrixInverse m
+  | isMatrixInvertible m    = scaleMatrix (1/det) $ matrixTranspose cofactors
+  | otherwise               = error ("Matrix is not invertible\n"
+                                 ++ showMatrix m)
+  where
+    det = matrixDeterminant m
+    l = length m
+    xy = chunkList l [(x,y) | x<-[0..(l-1)],y<-[0..(l-1)]]
+    cofactors = map (map (\(x,y) -> matrixCofactor x y m)) xy
+
