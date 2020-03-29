@@ -110,8 +110,8 @@ testMatrixMult =
                    ,[2,4,4,2]
                    ,[8,6,4,1]
                    ,[0,0,0,1]]
-    d = matrixFromPoint $ makePoint 1 2 3
-    cd = matrixFromPoint $ makePoint 18 24 33
+    d = makePointMatrix 1 2 3
+    cd = makePointMatrix 18 24 33
     i = makeIdentity 4
 
 testMatrixTranspose :: Test

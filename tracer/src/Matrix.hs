@@ -30,6 +30,14 @@ pointFromMatrix m = Point nx ny nz nw
     nz = getMatrixValue 2 0 m
     nw = getMatrixValue 3 0 m
 
+-- Shorthand for getting a matrix representation for a point
+makePointMatrix :: Float -> Float -> Float -> Matrix
+makePointMatrix x y z = matrixFromPoint $ makePoint x y z
+
+-- Shorthand for getting a matrix representation for a vector
+makeVectorMatrix :: Float -> Float -> Float -> Matrix
+makeVectorMatrix x y z = matrixFromPoint $ makeVector x y z
+
 -- Matrices use floats, need to use rough equality check
 matrixEqual :: Matrix -> Matrix -> Bool
 matrixEqual a b =
