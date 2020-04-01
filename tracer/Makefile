@@ -19,7 +19,7 @@ repl:
 
 count:
 	@echo "Line counts:";
-	@bash count.sh src;
 	@bash count.sh demo;
-	@bash count.sh test;
 	@bash count.sh exe;
+	@bash count.sh src;
+	@bash count.sh test;

@@ -7,6 +7,7 @@ import TestCanvas (canvasTest)
 import TestColor (colorTests)
 import TestMatrix (matrixTests)
 import TestPoint (pointTests)
+import TestRay (rayTests)
 import TestTransform (transformTests)
 import TestUtil (utilTests)
 
@@ -17,6 +18,7 @@ tests = TestList $ []
                  ++ matrixTests
                  ++ pointTests
                  ++ utilTests
+                 ++ rayTests
                  ++ transformTests
 
 main :: IO Counts
