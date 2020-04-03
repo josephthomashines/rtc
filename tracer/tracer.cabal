@@ -51,6 +51,7 @@ test-suite tracer-tests
                      , TestMatrix
                      , TestPoint
                      , TestRay
+                     , TestSphere
                      , TestTransform
                      , TestUtil
   build-depends:       base >=4.13 && <5

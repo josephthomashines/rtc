@@ -1,7 +1,11 @@
 module Ray where
 
+import Matrix
 import Point
 import Sphere
+import Transform
+
+import Util (floatEqual)
 
 import Data.List
 
@@ -22,13 +26,15 @@ rayPosition r t =
     d = direction r
 
 -- Get where the ray intersects the sphere
-raySphereIntersect :: Ray -> Sphere -> [Float]
+raySphereIntersect :: Ray -> Sphere -> Intersections
 raySphereIntersect r s
   | discrim < 0    = []
-  | otherwise      = sort [t1,t2]
+  | otherwise      = rts
   where
-    o = origin r
-    d = direction r
+    tr1 = rayTranslate r (matrixInverse $ translate s)
+    tr = rayTransform tr1 (matrixInverse $ transform s)
+    o = origin tr
+    d = direction tr
     s2r = subPoints o (makePoint 0 0 0)
     a = dotPoints d d
     b = 2 * dotPoints d s2r
@@ -37,12 +43,49 @@ raySphereIntersect r s
     ad = abs discrim
     t1 = (-b - (sqrt ad)) / (2*a)
     t2 = (-b + (sqrt ad)) / (2*a)
+    ts = sort [t1,t2]
+    rts = map (\t -> makeIntersection t s) ts
 
 -- Type to track intersections
 -- TODO: Replace sphere with generic object
 data Intersection = Intersection {t :: Float
                                  ,object :: Sphere
                                  }
+  deriving (Show)
+
+instance Eq Intersection where
+  a == b = (floatEqual (t a) (t b))
+        && ((object a) == (object b))
 
 makeIntersection :: Float -> Sphere -> Intersection
 makeIntersection t obj = Intersection t obj
+
+type Intersections = [Intersection]
+
+-- Returns the smallest positive t-valued intersection,
+-- or nothing if no valid hits
+hit :: Intersections -> Maybe Intersection
+hit is
+  | length psis > 0    = Just $ head psis
+  | otherwise          = Nothing
+  where
+    sis = sortOn t is
+    psis = filter (\i -> (t i) >= 0) sis
+
+-- Translate a ray
+rayTranslate :: Ray -> Transform -> Ray
+rayTranslate r t = makeRay ot (pointFromMatrix d)
+  where
+    o = matrixFromPoint $ origin r
+    d = matrixFromPoint $ direction r
+    ot = pointFromMatrix $ matrixMult t o
+    dt = pointFromMatrix $ matrixMult t d
+
+-- Transform a ray
+rayTransform :: Ray -> Transform -> Ray
+rayTransform r t = makeRay ot dt
+  where
+    o = matrixFromPoint $ origin r
+    d = matrixFromPoint $ direction r
+    ot = pointFromMatrix $ matrixMult t o
+    dt = pointFromMatrix $ matrixMult t d
