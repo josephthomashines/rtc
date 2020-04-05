@@ -21,6 +21,8 @@ library
   exposed-modules:     Tracer
                      , Canvas
                      , Color
+                     , Light
+                     , Material
                      , Matrix
                      , Point
                      , Ray
@@ -48,6 +50,8 @@ test-suite tracer-tests
   type:                exitcode-stdio-1.0
   other-modules:       TestCanvas
                      , TestColor
+                     , TestLight
+                     , TestMaterial
                      , TestMatrix
                      , TestPoint
                      , TestRay

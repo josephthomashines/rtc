@@ -314,6 +314,22 @@ testCrossPoints =
     b = makeVector 3 2 1
     c = makeVector (-3) 2 (-1)
 
+testReflectVector :: Test
+testReflectVector =
+  TestList [TestCase (assertEqual "First reflect"
+                     (makeVector 1 1 0)
+                     (reflectVector n1 v1))
+           ,TestCase (assertEqual "Second reflect"
+                     (makeVector 1 0 0)
+                     (reflectVector n2 v2))
+           ]
+  where
+    v1 = makeVector 1 (-1) 0
+    n1 = makeVector 0 1 0
+    r2o2 = (sqrt 2)/2
+    v2 = makeVector 0 (-1) 0
+    n2 = makeVector r2o2 r2o2 0
+
 pointTests :: [Test]
 pointTests = [testMakePoint
              ,testMakeVector
@@ -331,4 +347,5 @@ pointTests = [testMakePoint
              ,testNormalizePoint
              ,testDotPoints
              ,testCrossPoints
+             ,testReflectVector
              ]

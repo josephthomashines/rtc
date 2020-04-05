@@ -5,6 +5,8 @@ import System.Exit
 
 import TestCanvas (canvasTest)
 import TestColor (colorTests)
+import TestLight (lightTests)
+import TestMaterial (materialTests)
 import TestMatrix (matrixTests)
 import TestPoint (pointTests)
 import TestRay (rayTests)
@@ -16,6 +18,8 @@ tests :: Test
 tests = TestList $ []
                  ++ canvasTest
                  ++ colorTests
+                 ++ lightTests
+                 ++ materialTests
                  ++ matrixTests
                  ++ pointTests
                  ++ utilTests
