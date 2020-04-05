@@ -6,13 +6,20 @@ test:
 
 clean:
 	cabal v2-clean
-	-@rm -rfv *.ppm
+	-@rm -rfv *.ppm *.prof *.aux *.hp *.ps cabal.project.local
 
 build:
-	cabal v2-build --enable-tests
+	cabal v2-build --enable-tests --enable-profiling
 
 run:
 	cabal v2-run tracer -- $(ARGS)
+
+prof:
+	cabal v2-run --enable-profiling tracer -- $(ARGS) && \
+		make graph
+
+graph:
+	hp2ps -e8in -c tracer.hp
 
 repl:
 	cabal v2-repl

@@ -19,6 +19,12 @@ instance Eq Color where
 makeColor :: Float -> Float -> Float -> Color
 makeColor r g b = Color r g b
 
+black :: Color
+black = makeColor 0 0 0
+
+white :: Color
+white = makeColor 1 1 1
+
 -- Add colors
 addColors :: Color -> Color -> Color
 addColors c1 c2 = makeColor nr ng nb

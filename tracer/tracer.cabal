@@ -30,6 +30,7 @@ library
                      , Transform
                      , Util
   other-modules:       DemoCanvas
+                     , DemoLight
                      , DemoPoint
                      , DemoRay
                      , DemoTransform
@@ -40,6 +41,11 @@ library
   default-language:    Haskell2010
 
 executable tracer
+  ghc-options:
+    -O2
+    -threaded
+    -fprof-auto
+    "-with-rtsopts=-N -p -s -h -i0.1"
   build-depends:       base >=4.13 && <5
                      , tracer
   hs-source-dirs:      exe
