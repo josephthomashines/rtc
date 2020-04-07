@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/joseph/repos/rtc/c/main.c
+stdio.h
+-
+stdlib.h
+-
+say_hello.h
+/home/joseph/repos/rtc/c/say_hello.h
+
+/home/joseph/repos/rtc/c/src/primitives.c
+
+/home/joseph/repos/rtc/c/src/say_hello.c
+stddef.h
+-
+string.h
+-
+stdlib.h
+-
+say_hello.h
+/home/joseph/repos/rtc/c/src/say_hello.h
+
+include/say_hello.h
+
