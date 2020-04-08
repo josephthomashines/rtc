@@ -15,9 +15,8 @@ FILE(GLOB SOURCE_FILES src/*.c)
 FILE(GLOB SOURCE_HEADERS include/*.h)
 add_executable(tracer main.c ${SOURCE_FILES} ${SOURCE_HEADERS})
 
-# Disable testing for now
-#FILE(GLOB TEST_SOURCE_FILES test/*.c)
-#add_executable(test_tracer ${TEST_SOURCE_FILES} ${SOURCE_FILES} ${SOURCE_HEADERS})
+FILE(GLOB TEST_SOURCE_FILES test/*)
+add_executable(test_tracer ${TEST_SOURCE_FILES} ${SOURCE_FILES} ${SOURCE_HEADERS})
 
 install(TARGETS tracer
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
