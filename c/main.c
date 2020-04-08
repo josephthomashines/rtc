@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "primitives.h"
-
+#include "resource.h"
 
 int main() {
   Primitive* p1 = new_point(1.5,2,3);
@@ -17,11 +17,6 @@ int main() {
   char* sumStr = toString(sum);
   printf("= %s\n",sumStr);
 
-  free_primitive(p1);
-  free_primitive(p2);
-  free_primitive(sum);
-  free(p1Str);
-  free(p2Str);
-  free(sumStr);
+  destroy_resource_stack(global_resources());
   return 0;
 }

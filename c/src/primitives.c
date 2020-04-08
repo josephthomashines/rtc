@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "primitives.h"
+#include "resource.h"
 #include "util.h"
 
 // A basic primitive is just a list of float values
@@ -18,6 +19,7 @@ Primitive* new_primitive(float x, float y, float z, float w) {
   Primitive* p = malloc(sizeof(Primitive));
   p->values = values;
 
+  push_resource(global_resources(),p,free_primitive);
   return p;
 }
 
@@ -56,6 +58,7 @@ char* toString(Primitive* p) {
     }
   }
 
+  push_resource(global_resources(),out,free);
   return out;
 }
 
