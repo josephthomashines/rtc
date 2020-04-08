@@ -1,9 +1,0 @@
-/home/joseph/repos/rtc/c/CMakeFiles/install/strip.dir
-/home/joseph/repos/rtc/c/CMakeFiles/install/local.dir
-/home/joseph/repos/rtc/c/CMakeFiles/install.dir
-/home/joseph/repos/rtc/c/CMakeFiles/list_install_components.dir
-/home/joseph/repos/rtc/c/CMakeFiles/tracer.dir
-/home/joseph/repos/rtc/c/CMakeFiles/clean-all.dir
-/home/joseph/repos/rtc/c/CMakeFiles/edit_cache.dir
-/home/joseph/repos/rtc/c/CMakeFiles/test_tracer.dir
-/home/joseph/repos/rtc/c/CMakeFiles/rebuild_cache.dir

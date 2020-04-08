@@ -1,1 +1,0 @@
-/usr/bin/cc  -Wall  -rdynamic CMakeFiles/tracer.dir/main.c.o CMakeFiles/tracer.dir/src/primitives.c.o CMakeFiles/tracer.dir/src/say_hello.c.o  -o out/tracer 

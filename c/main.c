@@ -2,14 +2,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "say_hello.h"
+#include "primitives.h"
 
 
 int main() {
-    char str[100];
-    printf("Your name: ");
-    char* hello = say_hello(fgets(str, 99, stdin));
-    printf("> %s", hello);
-    free(hello);
-    return 0;
+  Primitive* p1 = new_point(1.5,2,3);
+  Primitive* p2 = new_vector(4,5,6);
+
+  char* p1Str = toString(p1);
+  char* p2Str = toString(p2);
+  printf("%s + %s\n",p1Str,p2Str);
+
+  Primitive* sum = add_primitives(p1,p2);
+  char* sumStr = toString(sum);
+  printf("= %s\n",sumStr);
+
+  free_primitive(p1);
+  free_primitive(p2);
+  free_primitive(sum);
+  free(p1Str);
+  free(p2Str);
+  free(sumStr);
+  return 0;
 }

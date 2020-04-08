@@ -1,0 +1,27 @@
+#!/bin/bash
+
+
+center() {
+  termwidth="$(tput cols)"
+  padding="$(printf '%0.1s' ={1..500})"
+  printf '%*.*s %s %*.*s\n' 0 "$(((termwidth-2-${#1})/2))" "$padding" "$1" 0 "$(((termwidth-1-${#1})/2))" "$padding"
+}
+
+clear;
+
+red=`tput setaf 1`
+green=`tput setaf 2`
+reset=`tput sgr0`
+
+inotifywait -m -e modify src/* include/* test/* main.c |
+  while read file; do
+    clear;
+    date;
+    cmake . && {
+      make && {
+      echo "${green}$(center "Success!")${reset}";
+      };
+    } || {
+      echo "${red}$(center "Failure")${reset}";
+    };
+  done;
