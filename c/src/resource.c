@@ -18,7 +18,7 @@ typedef struct ResourceStack {
 
 // Create a new resource stack
 ResourceStack* new_resource_stack() {
-  ResourceStack* rss = calloc(1,sizeof(ResourceStack));
+  ResourceStack* rss = (ResourceStack*)calloc(1,sizeof(ResourceStack));
   rss->top = NULL;
 
   return rss;
@@ -26,7 +26,7 @@ ResourceStack* new_resource_stack() {
 
 // Push a resource onto the stack
 void push_resource(ResourceStack* rss, void* ptr, Dtor* dtor) {
-  Resource* rs = calloc(1,sizeof(Resource));
+  Resource* rs = (Resource*)calloc(1,sizeof(Resource));
   rs->ptr = ptr;
   rs->dtor = dtor;
   rs->next = rss->top;

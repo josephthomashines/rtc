@@ -62,6 +62,15 @@ char* toString(Primitive* p) {
   return out;
 }
 
+int primitivesEqual(Primitive* a, Primitive* b) {
+  int xs = floatEquals((a->values)[0],(b->values)[0]);
+  int ys = floatEquals((a->values)[1],(b->values)[1]);
+  int zs = floatEquals((a->values)[2],(b->values)[2]);
+  int ws = floatEquals((a->values)[3],(b->values)[3]);
+
+  return (!xs && !ys && !zs && !ws);
+}
+
 Primitive* add_primitives(Primitive* a, Primitive* b) {
   float nx = (a->values)[0] + (b->values)[0];
   float ny = (a->values)[1] + (b->values)[1];

@@ -13,7 +13,7 @@ red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
 
-inotifywait -m -e modify src/* include/* test/* main.c |
+inotifywait -m -e modify src/* include/* test/* main.c CMakeLists.txt |
   while read file; do
     clear;
     date;
