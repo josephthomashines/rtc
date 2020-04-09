@@ -18,10 +18,11 @@ FILE(GLOB SOURCE_FILES src/*.c)
 FILE(GLOB SOURCE_HEADERS include/*.h)
 add_executable(tracer main.c ${SOURCE_FILES} ${SOURCE_HEADERS})
 
+FILE(GLOB TEST_FILES test/*.h)
 enable_testing()
 find_package(Check REQUIRED)
 set(LIBS ${LIBS} ${CHECK_LIBRARIES})
-add_executable(test_tracer test/test_tracer.c ${SOURCE_FILES} ${SOURCE_HEADERS})
+add_executable(test_tracer test/test_tracer.c ${TEST_FILES} ${SOURCE_FILES} ${SOURCE_HEADERS})
 target_link_libraries(test_tracer ${LIBS})
 add_test(test_tracer ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_tracer)
 

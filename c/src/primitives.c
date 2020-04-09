@@ -24,7 +24,7 @@ Primitive* new_primitive(float x, float y, float z, float w) {
 }
 
 Primitive* new_point(float x, float y, float z) {
-  return new_primitive(x,y,z,POINT_W);
+  return new_primitive(x,y,z,1);
 }
 
 Primitive* new_vector(float x, float y, float z) {
@@ -39,8 +39,8 @@ void free_primitive(Primitive* p) {
 }
 
 char* toString(Primitive* p) {
-  int BUF_SIZE = PRIMITIVE_SIZE*5;
-  char* out = calloc(1,sizeof(char)*(BUF_SIZE));
+  int BUF_SIZE = PRIMITIVE_SIZE*32;
+  char* out = (char*)calloc(1,sizeof(char)*(BUF_SIZE));
 
   for (int i=0;i<PRIMITIVE_SIZE;i++) {
     if (i != 3) {
@@ -68,7 +68,7 @@ int primitivesEqual(Primitive* a, Primitive* b) {
   int zs = floatEquals((a->values)[2],(b->values)[2]);
   int ws = floatEquals((a->values)[3],(b->values)[3]);
 
-  return (!xs && !ys && !zs && !ws);
+  return (xs && ys && zs && ws);
 }
 
 Primitive* add_primitives(Primitive* a, Primitive* b) {

@@ -17,6 +17,11 @@ int main() {
   char* sumStr = toString(sum);
   printf("= %s\n",sumStr);
 
+  Primitive* a = new_point(1,2,3);
+  Primitive* b = new_point(1,2,3);
+
+  printf("a == b = %d\n",primitivesEqual(a,b));
+
   destroy_resource_stack(global_resources());
   return 0;
 }

@@ -7,3 +7,7 @@ cmake_install.cmake
 out
 out/
 out/*
+CTestTestfile.cmake
+Testing
+Testing/
+Testing/*
