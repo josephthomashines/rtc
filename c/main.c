@@ -16,12 +16,13 @@ int main() {
   Primitive* sum = add_primitives(p1,p2);
   char* sumStr = toString(sum);
   printf("= %s\n",sumStr);
+  G_CLEAR_STACK;
 
   Primitive* a = new_point(1,2,3);
   Primitive* b = new_point(1,2,3);
 
   printf("a == b = %d\n",primitivesEqual(a,b));
 
-  destroy_resource_stack(global_resources());
+  G_FREE_STACK;
   return 0;
 }

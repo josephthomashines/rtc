@@ -44,7 +44,10 @@ void destroy_resource(ResourceStack* rss, void* ptr) {
     if (curr->ptr == ptr) {
       curr->dtor(ptr);
       free(curr);
-      prev->next = next;
+      if (prev != NULL) {
+        prev->next = next;
+      }
+      rss->top = NULL;
       break;
     }
     prev = curr;
@@ -66,18 +69,26 @@ void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr) {
   }
 }
 
-// Destroy the whole stack
-void destroy_resource_stack(ResourceStack* rss) {
-  Resource* curr = rss->top;
-  Resource* next = NULL;
+// Clear the whole stack
+void clear_resource_stack(ResourceStack* rss) {
+  if (rss != NULL) {
+    Resource* curr = rss->top;
+    Resource* next = NULL;
 
-  while (curr != NULL) {
-    next = curr->next;
-    curr->dtor(curr->ptr);
-    free(curr);
-    curr = next;
+    while (curr != NULL) {
+      next = curr->next;
+      curr->dtor(curr->ptr);
+      free(curr);
+      curr = next;
+    }
   }
 
+  rss->top = NULL;
+}
+
+// Destroy the whole stack
+void destroy_resource_stack(ResourceStack* rss) {
+  clear_resource_stack(rss);
   free(rss);
 }
 
@@ -86,7 +97,7 @@ ResourceStack* g_resources = NULL;
 
 // Get the global resources, initialize if NULL
 ResourceStack* global_resources() {
-  if (!g_resources) {
+  if (g_resources == NULL) {
     g_resources = new_resource_stack();
   }
   return g_resources;

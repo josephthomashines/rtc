@@ -24,11 +24,23 @@ Primitive* new_primitive(float x, float y, float z, float w) {
 }
 
 Primitive* new_point(float x, float y, float z) {
-  return new_primitive(x,y,z,1);
+  return new_primitive(x,y,z,POINT_W);
 }
 
 Primitive* new_vector(float x, float y, float z) {
   return new_primitive(x,y,z,VECTOR_W);
+}
+
+int is_point(Primitive* p) {
+  int w = (p->values)[3];
+
+  return floatEquals(w,POINT_W);
+}
+
+int is_vector(Primitive* p){
+  int w = (p->values)[3];
+
+  return floatEquals(w,VECTOR_W);
 }
 
 void free_primitive(Primitive* p) {
@@ -79,8 +91,37 @@ Primitive* add_primitives(Primitive* a, Primitive* b) {
 
   // Check for error state (point+point)
   if (!floatEquals(nw,0) && !floatEquals(nw,1)) {
+    perror("Cannot add two points together");
     exit(EXIT_FAILURE);
   }
 
   return new_primitive(nx,ny,nz,nw);
+}
+
+Primitive* sub_primitives(Primitive* a, Primitive* b) {
+  float nx = (a->values)[0] - (b->values)[0];
+  float ny = (a->values)[1] - (b->values)[1];
+  float nz = (a->values)[2] - (b->values)[2];
+  float nw = (a->values)[3] - (b->values)[3];
+
+  // Check for error state (point+point)
+  if (!floatEquals(nw,0) && !floatEquals(nw,1)) {
+    perror("Cannot subtract a point from a vector");
+    exit(EXIT_FAILURE);
+  }
+
+  return new_primitive(nx,ny,nz,nw);
+}
+
+Primitive* scale_primitive(Primitive* p, float s) {
+  float nx = (p->values)[0] *= s;
+  float ny = (p->values)[1] *= s;
+  float nz = (p->values)[2] *= s;
+  float nw = (p->values)[3];
+
+  return new_primitive(nx,ny,nz,nw);
+}
+
+Primitive* negate_primitive(Primitive* p) {
+  return scale_primitive(p,-1);
 }
