@@ -33,4 +33,8 @@ extern ResourceStack* g_resources;
 #define G_FREE_STACK \
   destroy_resource_stack(global_resources());
 
+#define G_RETURN \
+  destroy_resource_stack(global_resources());\
+  return 0;\
+
 #endif

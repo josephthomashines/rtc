@@ -66,13 +66,13 @@ char* to_string(Primitive* p) {
 
   for (int i=0;i<PRIMITIVE_SIZE;i++) {
     if (i != 3) {
-      int n = sprintf(out+strlen(out),"%0.12f,",(p->values)[i]);
+      int n = sprintf(out+strlen(out),"%0.2f,",(p->values)[i]);
       if (n < 0) {
         fprintf(stderr,"Error printing Primitive to string.");
         exit(EXIT_FAILURE);
       }
     } else {
-      int n = sprintf(out+strlen(out),"%0.12f",(p->values)[i]);
+      int n = sprintf(out+strlen(out),"%0.2f",(p->values)[i]);
       if (n < 0) {
         fprintf(stderr,"Error printing Primitive to string.");
         exit(EXIT_FAILURE);

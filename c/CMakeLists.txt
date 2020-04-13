@@ -10,11 +10,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
 include_directories(
   "${CMAKE_SOURCE_DIR}/src" ,
+  "${CMAKE_SOURCE_DIR}/demo" ,
   "${CMAKE_SOURCE_DIR}/include" ,
   ${CHECK_INCLUDE_DIRS}
   )
 
-FILE(GLOB SOURCE_FILES src/*.c)
+FILE(GLOB SOURCE_FILES src/*.c demo/*)
 FILE(GLOB SOURCE_HEADERS include/*.h)
 add_executable(tracer main.c ${SOURCE_FILES} ${SOURCE_HEADERS})
 
