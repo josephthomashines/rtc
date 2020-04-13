@@ -16,8 +16,11 @@ make
 
 This produces 2 executables in the `out/` directory.
 `out/tracer` is the main executable which can be ran to
-produce ?
-Running `ctest` will find the `out/test_tracer` executable
+produce output and demos.
+`out/tracer -h` will print information about what the
+program can do.
+
+Running `make ctest` will find the `out/test_tracer` executable
 and run the tests
 
 ## Developers
