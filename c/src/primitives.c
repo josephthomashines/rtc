@@ -10,7 +10,6 @@ typedef struct Primitive {
 float primitive_x(Primitive* p) {
   return (p->values)[0];
 }
-
 float primitive_y(Primitive* p) {
   return (p->values)[1];
 }
