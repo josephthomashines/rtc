@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(tracer)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -lm")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/out")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
@@ -38,4 +38,8 @@ add_custom_target(clean-all
                        ${CMAKE_BINARY_DIR}/Testing
                        ${CMAKE_BINARY_DIR}/vgcore.*
              && rmdir  ${CMAKE_BINARY_DIR}/out
+)
+
+add_custom_target(ctest
+  make && ctest -VV --output-on-failure
 )

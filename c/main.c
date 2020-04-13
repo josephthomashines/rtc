@@ -1,28 +1,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "primitives.h"
 #include "resource.h"
 
-int main() {
-  Primitive* p1 = new_point(1.5,2,3);
-  Primitive* p2 = new_vector(4,5,6);
+int main(int argc, char* argv[]) {
+  int opt;
+  char filename[64];
 
-  char* p1Str = toString(p1);
-  char* p2Str = toString(p2);
-  printf("%s + %s\n",p1Str,p2Str);
+  while((opt = getopt(argc, argv, ":f:d:")) != -1) {
+      switch(opt) {
+          case 'f':
+              strcpy(filename,optarg);
+              break;
+          case 'd':
+              printf("Demo %s\n",optarg);
+              break;
+          case '?':
+              fprintf(stderr,"unknown option: %c\n", optopt);
+              break;
+      }
+  }
 
-  Primitive* sum = add_primitives(p1,p2);
-  char* sumStr = toString(sum);
-  printf("= %s\n",sumStr);
-  G_CLEAR_STACK;
+  // optind is for the extra arguments
+  // which are not parsed
+  /*for(; optind < argc; optind++) {
+      printf("extra arguments: %s\n", argv[optind]);
+  }*/
 
-  Primitive* a = new_point(1,2,3);
-  Primitive* b = new_point(1,2,3);
-
-  printf("a == b = %d\n",primitivesEqual(a,b));
-
-  G_FREE_STACK;
   return 0;
 }

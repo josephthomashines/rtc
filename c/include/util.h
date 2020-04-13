@@ -1,8 +1,11 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <math.h>
 
-int floatEquals(float a, float b);
+int float_equals(float a, float b);
 
 #endif

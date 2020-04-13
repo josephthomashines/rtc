@@ -4,18 +4,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <check.h>
+#include <math.h>
 
 #include "test_helpers.h"
 
 #include "primitives.h"
 #include "resource.h"
+#include "util.h"
 
 // Macros for primitives
 #define TEST_TWO_PRIMITIVES(p1,p2) {\
   ck_assert(p1 != NULL);\
   ck_assert(p2 != NULL);\
-  ck_assert_msg(primitivesEqual(p1,p2) == 1,\
-      "\nPrimitives should equal, got %s = %s",toString(p1),toString(p2));\
+  ck_assert_msg(primitives_equal(p1,p2) == 1,\
+      "\nPrimitives should equal, got %s = %s",to_string(p1),to_string(p2));\
 }
 
 START_TEST (test_new) {
@@ -72,15 +74,54 @@ START_TEST (test_operations) {
   solution = new_vector(-3,-2,-1);
   TEST_TWO_PRIMITIVES(nv1,solution);
 
-  Primitive* bv1 = negate_primitive(v1);
+  Primitive* bv1 = negate_primitive(nv1);
   TEST_TWO_PRIMITIVES(v1,bv1);
   G_CLEAR_STACK;
 
   // Scaling
+  Primitive* prim = new_primitive(1,-2,3,-4);
+  Primitive* sol1 = new_primitive(3.5,-7,10.5,-14);
+  Primitive* sol2 = new_primitive(0.5,-1,1.5,-2);
+  TEST_TWO_PRIMITIVES(scale_primitive(prim,3.5),sol1);
+  TEST_TWO_PRIMITIVES(scale_primitive(prim,0.5),sol2);
+  G_CLEAR_STACK;
+
   // Magnitude
+  v1 = new_vector(1,0,0);
+  v2 = new_vector(0,1,0);
+  Primitive* v3 = new_vector(0,0,1);
+  Primitive* v4 = new_vector(1,2,3);
+  Primitive* v5 = new_vector(-1,-2,-3);
+
+  ck_assert(float_equals(magnitude_vector(v1),1));
+  ck_assert(float_equals(magnitude_vector(v2),1));
+  ck_assert(float_equals(magnitude_vector(v3),1));
+  ck_assert(float_equals(magnitude_vector(v4),sqrt(14)));
+  ck_assert(float_equals(magnitude_vector(v5),sqrt(14)));
+  G_CLEAR_STACK;
+
   // Normalize
+  v1 = new_vector(4,0,0);
+  v2 = new_vector(1,2,3);
+  Primitive* nv2 = normalize_vector(v2);
+  sol1 = new_vector(1,0,0);
+  sol2 = new_vector(0.26726,0.53452,0.80178);
+  TEST_TWO_PRIMITIVES(normalize_vector(v1),sol1);
+  TEST_TWO_PRIMITIVES(normalize_vector(v2),sol2);
+  ck_assert(float_equals(magnitude_vector(normalize_vector(v1)),1));
+  ck_assert(float_equals(magnitude_vector(normalize_vector(v2)),1));
+  G_CLEAR_STACK;
+
   // Dot product
+  Primitive* a = new_vector(1,2,3);
+  Primitive* b = new_vector(2,3,4);
+  ck_assert(float_equals(dot_vectors(a,b),20));
+
   // Cross product
+  sol1 = new_vector(-1,2,-1);
+  sol2 = new_vector(1,-2,1);
+  TEST_TWO_PRIMITIVES(cross_vectors(a,b),sol1);
+  TEST_TWO_PRIMITIVES(cross_vectors(b,a),sol2);
 
   G_FREE_STACK;
 } END_TEST

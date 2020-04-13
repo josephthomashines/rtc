@@ -1,7 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "primitives.h"
 #include "resource.h"
 #include "util.h"
@@ -11,6 +7,20 @@ typedef struct Primitive {
   float* values;
 } Primitive;
 
+float primitive_x(Primitive* p) {
+  return (p->values)[0];
+}
+
+float primitive_y(Primitive* p) {
+  return (p->values)[1];
+}
+float primitive_z(Primitive* p) {
+  return (p->values)[2];
+}
+float primitive_w(Primitive* p) {
+  return (p->values)[3];
+}
+
 Primitive* new_primitive(float x, float y, float z, float w) {
   float* values = malloc(sizeof(float)*PRIMITIVE_SIZE);
   values[0] = x; values[1] = y;
@@ -19,7 +29,7 @@ Primitive* new_primitive(float x, float y, float z, float w) {
   Primitive* p = malloc(sizeof(Primitive));
   p->values = values;
 
-  push_resource(global_resources(),p,free_primitive);
+  G_PUSH(p,free_primitive);
   return p;
 }
 
@@ -34,13 +44,13 @@ Primitive* new_vector(float x, float y, float z) {
 int is_point(Primitive* p) {
   int w = (p->values)[3];
 
-  return floatEquals(w,POINT_W);
+  return float_equals(w,POINT_W);
 }
 
 int is_vector(Primitive* p){
   int w = (p->values)[3];
 
-  return floatEquals(w,VECTOR_W);
+  return float_equals(w,VECTOR_W);
 }
 
 void free_primitive(Primitive* p) {
@@ -50,35 +60,35 @@ void free_primitive(Primitive* p) {
   return;
 }
 
-char* toString(Primitive* p) {
+char* to_string(Primitive* p) {
   int BUF_SIZE = PRIMITIVE_SIZE*32;
   char* out = (char*)calloc(1,sizeof(char)*(BUF_SIZE));
 
   for (int i=0;i<PRIMITIVE_SIZE;i++) {
     if (i != 3) {
-      int n = sprintf(out+strlen(out),"%0.2f,",(p->values)[i]);
+      int n = sprintf(out+strlen(out),"%0.12f,",(p->values)[i]);
       if (n < 0) {
-        perror("Error printing Primitive to string.");
+        fprintf(stderr,"Error printing Primitive to string.");
         exit(EXIT_FAILURE);
       }
     } else {
-      int n = sprintf(out+strlen(out),"%0.2f",(p->values)[i]);
+      int n = sprintf(out+strlen(out),"%0.12f",(p->values)[i]);
       if (n < 0) {
-        perror("Error printing Primitive to string.");
+        fprintf(stderr,"Error printing Primitive to string.");
         exit(EXIT_FAILURE);
       }
     }
   }
 
-  push_resource(global_resources(),out,free);
+  G_PUSH(out,free);
   return out;
 }
 
-int primitivesEqual(Primitive* a, Primitive* b) {
-  int xs = floatEquals((a->values)[0],(b->values)[0]);
-  int ys = floatEquals((a->values)[1],(b->values)[1]);
-  int zs = floatEquals((a->values)[2],(b->values)[2]);
-  int ws = floatEquals((a->values)[3],(b->values)[3]);
+int primitives_equal(Primitive* a, Primitive* b) {
+  int xs = float_equals((a->values)[0],(b->values)[0]);
+  int ys = float_equals((a->values)[1],(b->values)[1]);
+  int zs = float_equals((a->values)[2],(b->values)[2]);
+  int ws = float_equals((a->values)[3],(b->values)[3]);
 
   return (xs && ys && zs && ws);
 }
@@ -90,8 +100,8 @@ Primitive* add_primitives(Primitive* a, Primitive* b) {
   float nw = (a->values)[3] + (b->values)[3];
 
   // Check for error state (point+point)
-  if (!floatEquals(nw,0) && !floatEquals(nw,1)) {
-    perror("Cannot add two points together");
+  if (!float_equals(nw,0) && !float_equals(nw,1)) {
+    fprintf(stderr,"Cannot add two points together");
     exit(EXIT_FAILURE);
   }
 
@@ -105,8 +115,8 @@ Primitive* sub_primitives(Primitive* a, Primitive* b) {
   float nw = (a->values)[3] - (b->values)[3];
 
   // Check for error state (point+point)
-  if (!floatEquals(nw,0) && !floatEquals(nw,1)) {
-    perror("Cannot subtract a point from a vector");
+  if (!float_equals(nw,0) && !float_equals(nw,1)) {
+    fprintf(stderr,"Cannot subtract a point from a vector");
     exit(EXIT_FAILURE);
   }
 
@@ -114,14 +124,61 @@ Primitive* sub_primitives(Primitive* a, Primitive* b) {
 }
 
 Primitive* scale_primitive(Primitive* p, float s) {
-  float nx = (p->values)[0] *= s;
-  float ny = (p->values)[1] *= s;
-  float nz = (p->values)[2] *= s;
-  float nw = (p->values)[3];
+  float nx = (p->values)[0] * s;
+  float ny = (p->values)[1] * s;
+  float nz = (p->values)[2] * s;
+  float nw = (p->values)[3] * s;
 
   return new_primitive(nx,ny,nz,nw);
 }
 
 Primitive* negate_primitive(Primitive* p) {
   return scale_primitive(p,-1);
+}
+
+float magnitude_vector(Primitive* p) {
+  if (!is_vector(p)) {
+    fprintf(stderr,"Can only calculate magnitude of vector");
+    exit(EXIT_FAILURE);
+  }
+
+  float nx = (p->values)[0];
+  float ny = (p->values)[1];
+  float nz = (p->values)[2];
+  float nw = (p->values)[3];
+
+  return (float)(sqrt((nx*nx)+(ny*ny)+(nz*nz)+(nw*nw)));
+}
+
+Primitive* normalize_vector(Primitive* p) {
+  if (!is_vector(p)) {
+    fprintf(stderr,"Can only normalize vectors");
+    exit(EXIT_FAILURE);
+  }
+
+  return scale_primitive(p,1/magnitude_vector(p));
+}
+
+float dot_vectors(Primitive* a, Primitive* b) {
+  float nx = (a->values)[0] * (b->values)[0];
+  float ny = (a->values)[1] * (b->values)[1];
+  float nz = (a->values)[2] * (b->values)[2];
+  float nw = (a->values)[3] * (b->values)[3];
+
+  return (nx + ny + nz + nw);
+}
+
+Primitive* cross_vectors(Primitive* a, Primitive* b) {
+  float ax = (a->values)[0];
+  float ay = (a->values)[1];
+  float az = (a->values)[2];
+  float bx = (b->values)[0];
+  float by = (b->values)[1];
+  float bz = (b->values)[2];
+
+  return new_vector(
+      (ay*bz) - (az*by),
+      (az*bx) - (ax*bz),
+      (ax*by) - (ay*bx)
+      );
 }
