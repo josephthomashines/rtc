@@ -12,14 +12,16 @@
 #define VECTOR_W 0
 
 // Types
-typedef struct Primitive Primitive;
-Primitive* new_primitive(float x, float y, float z, float w);
+typedef struct Primitive {
+  float* values;
+} Primitive;
 
 // Functions
 float primitive_x(Primitive* p);
 float primitive_y(Primitive* p);
 float primitive_z(Primitive* p);
 float primitive_w(Primitive* p);
+Primitive* new_primitive(float x, float y, float z, float w);
 Primitive* new_point(float x, float y, float z);
 Primitive* new_vector(float x, float y, float z);
 int is_point(Primitive* p);

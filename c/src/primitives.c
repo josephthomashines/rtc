@@ -3,10 +3,6 @@
 #include "util.h"
 
 // A basic primitive is just a list of float values
-typedef struct Primitive {
-  float* values;
-} Primitive;
-
 float primitive_x(Primitive* p) {
   return (p->values)[0];
 }

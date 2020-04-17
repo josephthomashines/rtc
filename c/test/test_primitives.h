@@ -20,7 +20,7 @@
       "\nPrimitives should equal, got %s = %s",to_string(p1),to_string(p2));\
 }
 
-START_TEST (test_new) {
+START_TEST (test_new_primitive) {
   Primitive* point = new_point(4.3,-4.2,3.1);
   Primitive* solution = new_primitive(4.3,-4.2,3.1,1.0);
   TEST_TWO_PRIMITIVES(point,solution);
@@ -34,7 +34,7 @@ START_TEST (test_new) {
   G_FREE_STACK;
 } END_TEST
 
-START_TEST (test_operations) {
+START_TEST (test_primitive_operations) {
   Primitive* point = new_point(1,2,3);
   Primitive* vec = new_vector(1,2,3);
 
@@ -103,7 +103,6 @@ START_TEST (test_operations) {
   // Normalize
   v1 = new_vector(4,0,0);
   v2 = new_vector(1,2,3);
-  Primitive* nv2 = normalize_vector(v2);
   sol1 = new_vector(1,0,0);
   sol2 = new_vector(0.26726,0.53452,0.80178);
   TEST_TWO_PRIMITIVES(normalize_vector(v1),sol1);
@@ -127,8 +126,8 @@ START_TEST (test_operations) {
 } END_TEST
 
 TEST_SUITE(primitives,{
-  TEST_CASE(test_new);
-  TEST_CASE(test_operations);
+  TEST_CASE(test_new_primitive);
+  TEST_CASE(test_primitive_operations);
 });
 
 #endif

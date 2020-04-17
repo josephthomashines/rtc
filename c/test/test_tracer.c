@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <check.h>
 
+#include "test_canvas.h"
 #include "test_primitives.h"
-
 
 int main (int argc, char *argv[]) {
   int number_failed;
 
-  #define numSuites 1
+  #define numSuites 2
   Suite* (*suite_funcs[numSuites])() = {
+		canvas_suite,
     primitives_suite,
   };
 
