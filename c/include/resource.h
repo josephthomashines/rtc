@@ -27,6 +27,9 @@ extern ResourceStack* g_resources;
 #define G_PUSH(ptr,dtor) \
   push_resource(global_resources(),ptr,dtor);
 
+#define G_UPDATE(old_ptr,new_ptr) \
+	update_resource(global_resources(),old_ptr,new_ptr);
+
 #define G_CLEAR_STACK \
   clear_resource_stack(global_resources());
 

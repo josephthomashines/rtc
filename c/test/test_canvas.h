@@ -40,8 +40,35 @@ START_TEST (test_color_operations) {
 	G_FREE_STACK;
 } END_TEST
 
+START_TEST (test_new_canvas) {
+	Canvas* c = new_canvas(10,20);
+	ck_assert(c->w == 10); ck_assert(c->h == 20);
+	for (int i=0;i<c->h;i++) {
+		for (int j=0;j<c->w;j++) {
+			COLORS_EQUAL((c->pixels)[i][j],BLACK_COLOR);
+		}
+	}
+
+	G_FREE_STACK;
+} END_TEST
+
+START_TEST (test_canvas_operations) {
+	Canvas* c = new_canvas(10,20);
+	Color* red = new_color(1,0,0);
+	write_pixel(c,2,3,red);
+	COLORS_EQUAL((c->pixels)[2][3],red);
+	G_CLEAR_STACK;
+
+	c = new_canvas(5,3);
+	ck_assert(strcmp(canvas_to_ppm(c),"P3\n5 3\n255\n") == 0);
+
+	G_FREE_STACK;
+} END_TEST
+
 TEST_SUITE(canvas,{
   TEST_CASE(test_new_color);
   TEST_CASE(test_color_operations);
+	TEST_CASE(test_new_canvas);
+	TEST_CASE(test_canvas_operations);
 });
 #endif

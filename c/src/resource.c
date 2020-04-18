@@ -62,11 +62,16 @@ void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr) {
 
   while (curr != NULL) {
     if (curr->ptr == old_ptr) {
+      curr->dtor(curr->ptr);
       curr->ptr = new_ptr;
-      curr->dtor(old_ptr);
-      break;
+			return;
     }
+		curr = curr->next;
   }
+
+	fprintf(stderr,
+			"Could not find ptr on stack, are you sure its already been allocated?");
+	exit(EXIT_FAILURE);
 }
 
 // Clear the whole stack
