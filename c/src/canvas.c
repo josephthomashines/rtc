@@ -72,7 +72,9 @@ Canvas* new_canvas(int nw, int nh) {
 void free_canvas(Canvas* c) {
 	for (int i=0;i<c->h;i++) {
 		for (int j=0;j<c->w;j++) {
-			G_FREE((c->pixels)[i][j]);
+			if ((c->pixels)[i][j] != NULL) {
+				G_FREE((c->pixels)[i][j]);
+			}
 		}
 		free((c->pixels)[i]);
 	}
@@ -81,22 +83,21 @@ void free_canvas(Canvas* c) {
 }
 
 void write_pixel(Canvas* c, int row, int col, Color* color) {
-	//G_UPDATE((c->pixels)[row][col],color);
+	//G_UPDATE((c->pixels)[row][col],color); // Would like to get this to work
 
 	G_FREE((c->pixels)[row][col]);
 	(c->pixels)[row][col] = color;
-	//G_PUSH((c->pixels)[row][col],free); // NOTE: Might cause double free
 }
 
 char* canvas_to_ppm(Canvas* c) {
 	char* buf = calloc(1,
-			(sizeof(char)*13*c->w*c->h)+64);
+			(sizeof(char)*13*c->w*c->h)+64); // Verify this is the right calculation
 
 	sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
 
 	// TODO: Print colors
-	//			 TODO: Scale and clip colors to 0-255
-	//			 TODO: Wrap lines longer than 70 characters
+	//       TODO: Scale and clip colors to 0-255
+	//       TODO: Wrap lines longer than 70 characters
 
 	// TODO: Ensure the file ends with one new line
 

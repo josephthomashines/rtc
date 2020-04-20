@@ -64,6 +64,7 @@ void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr) {
     if (curr->ptr == old_ptr) {
       curr->dtor(curr->ptr);
       curr->ptr = new_ptr;
+
 			return;
     }
 		curr = curr->next;
@@ -82,7 +83,9 @@ void clear_resource_stack(ResourceStack* rss) {
 
     while (curr != NULL) {
       next = curr->next;
-      curr->dtor(curr->ptr);
+			if (curr->ptr != NULL) {
+				curr->dtor(curr->ptr);
+			}
       free(curr);
       curr = next;
     }

@@ -56,6 +56,12 @@ START_TEST (test_canvas_operations) {
 	Canvas* c = new_canvas(10,20);
 	Color* red = new_color(1,0,0);
 	write_pixel(c,2,3,red);
+
+	fprintf(stderr,"%f %f %f\n",
+			((c->pixels)[2][3])->r,
+			((c->pixels)[2][3])->g,
+			((c->pixels)[2][3])->b);
+
 	COLORS_EQUAL((c->pixels)[2][3],red);
 	G_CLEAR_STACK;
 
