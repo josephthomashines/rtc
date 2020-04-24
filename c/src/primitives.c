@@ -67,19 +67,13 @@ char* to_string(primitive_t* p) {
 	out = calloc(1,sizeof(char)*(BUF_SIZE));
 	VERIFY_ALLOC(out,"char*");
 
-	#define CHECK_SPRINTF(n)\
-      if (n < 0) {\
-        fprintf(stderr,"Error printing primitive_t to string.");\
-        exit(EXIT_FAILURE);\
-      }\
-
   for (int i=0;i<PRIMITIVE_SIZE;i++) {
     if (i != 3) {
       int n = sprintf(out+strlen(out),"%0.2f,",(p->values)[i]);
-			CHECK_SPRINTF(n);
+			CHECK_SPRINTF(n,"Error printing primitive_t to string\n");
     } else {
       int n = sprintf(out+strlen(out),"%0.2f",(p->values)[i]);
-			CHECK_SPRINTF(n);
+			CHECK_SPRINTF(n,"Error printing primitive_t to string\n");
     }
   }
 

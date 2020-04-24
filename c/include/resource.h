@@ -47,4 +47,11 @@ extern resource_stack_t* g_resources;
 		exit(EXIT_FAILURE);\
 	}\
 
+#define CHECK_SPRINTF(n,str)\
+	if (n < 0) {\
+		fprintf(stderr,str);\
+		G_FREE_STACK;\
+		exit(EXIT_FAILURE);\
+	}\
+
 #endif

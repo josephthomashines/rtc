@@ -106,6 +106,8 @@ char* canvas_to_ppm(canvas_t* c) {
 
 	sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
 
+  // int n = sprintf(buf+strlen(buf),"");
+	// CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
 	// TODO: Print colors
 	//       TODO: Scale and clip colors to 0-255
 	//       TODO: Wrap lines longer than 70 characters
