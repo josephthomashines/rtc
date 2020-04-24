@@ -9,29 +9,29 @@
 // Constants
 
 // Types
-typedef struct Color {
+typedef struct color_t {
 	float r;
 	float g;
 	float b;
-} Color;
+} color_t;
 
-typedef struct Canvas {
+typedef struct canvas_t {
 	int w; int h;
-	Color*** pixels;
-} Canvas;
+	color_t*** pixels;
+} canvas_t;
 
 // Functions
-Color* new_color(float r, float g, float b);
-int colors_equal(Color* a, Color* b);
-Color* add_colors(Color* a, Color* b);
-Color* sub_colors(Color* a, Color* b);
-Color* mult_colors(Color* a, Color* b);
-Color* scale_color(Color* a, float s);
+color_t* new_color(float r, float g, float b);
+int colors_equal(color_t* a, color_t* b);
+color_t* add_colors(color_t* a, color_t* b);
+color_t* sub_colors(color_t* a, color_t* b);
+color_t* mult_colors(color_t* a, color_t* b);
+color_t* scale_color(color_t* a, float s);
 
-Canvas* new_canvas(int nw, int nh);
-void free_canvas(Canvas* c);
-void write_pixel(Canvas* c, int row, int col, Color* color);
-char* canvas_to_ppm(Canvas* c);
+canvas_t* new_canvas(int nw, int nh);
+void free_canvas(canvas_t* c);
+void write_pixel(canvas_t* c, int row, int col, color_t* color);
+char* canvas_to_ppm(canvas_t* c);
 
 // Globals
 #define BLACK_COLOR \

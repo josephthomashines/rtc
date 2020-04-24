@@ -4,29 +4,29 @@
 #include "resource.h"
 
 // A pointer to a resource and its destructor
-typedef struct Resource {
+typedef struct resource_t {
   void* ptr;
   Dtor* dtor;
 
-  Resource* next;
-} Resource;
+  resource_t* next;
+} resource_t;
 
 // A stack of resources
-typedef struct ResourceStack {
-  Resource* top;
-} ResourceStack;
+typedef struct resource_stack_t {
+  resource_t* top;
+} resource_stack_t;
 
 // Create a new resource stack
-ResourceStack* new_resource_stack() {
-  ResourceStack* rss = (ResourceStack*)calloc(1,sizeof(ResourceStack));
+resource_stack_t* new_resource_stack() {
+  resource_stack_t* rss = calloc(1,sizeof(resource_stack_t));
   rss->top = NULL;
 
   return rss;
 }
 
 // Push a resource onto the stack
-void push_resource(ResourceStack* rss, void* ptr, Dtor* dtor) {
-  Resource* rs = (Resource*)calloc(1,sizeof(Resource));
+void push_resource(resource_stack_t* rss, void* ptr, Dtor* dtor) {
+  resource_t* rs = calloc(1,sizeof(resource_t));
   rs->ptr = ptr;
   rs->dtor = dtor;
   rs->next = rss->top;
@@ -35,10 +35,10 @@ void push_resource(ResourceStack* rss, void* ptr, Dtor* dtor) {
 }
 
 // Destroy and remove and resource from any position in the stack
-void destroy_resource(ResourceStack* rss, void* ptr) {
-  Resource* curr = rss->top;
-  Resource* prev = NULL;
-  Resource* next = NULL;
+void destroy_resource(resource_stack_t* rss, void* ptr) {
+  resource_t* curr = rss->top;
+  resource_t* prev = NULL;
+  resource_t* next = NULL;
 
   while (curr != NULL) {
     if (curr->ptr == ptr) {
@@ -57,8 +57,8 @@ void destroy_resource(ResourceStack* rss, void* ptr) {
 }
 
 // Update the pointer at any position in the stack
-void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr) {
-  Resource* curr = rss->top;
+void update_resource(resource_stack_t* rss, void* old_ptr, void* new_ptr) {
+  resource_t* curr = rss->top;
 
   while (curr != NULL) {
     if (curr->ptr == old_ptr) {
@@ -76,10 +76,10 @@ void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr) {
 }
 
 // Clear the whole stack
-void clear_resource_stack(ResourceStack* rss) {
+void clear_resource_stack(resource_stack_t* rss) {
   if (rss != NULL) {
-    Resource* curr = rss->top;
-    Resource* next = NULL;
+    resource_t* curr = rss->top;
+    resource_t* next = NULL;
 
     while (curr != NULL) {
       next = curr->next;
@@ -95,16 +95,16 @@ void clear_resource_stack(ResourceStack* rss) {
 }
 
 // Destroy the whole stack
-void destroy_resource_stack(ResourceStack* rss) {
+void destroy_resource_stack(resource_stack_t* rss) {
   clear_resource_stack(rss);
   free(rss);
 }
 
 // Initialize global resources
-ResourceStack* g_resources = NULL;
+resource_stack_t* g_resources = NULL;
 
 // Get the global resources, initialize if NULL
-ResourceStack* global_resources() {
+resource_stack_t* global_resources() {
   if (g_resources == NULL) {
     g_resources = new_resource_stack();
   }

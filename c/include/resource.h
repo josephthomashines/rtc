@@ -5,20 +5,20 @@
 
 // Types
 typedef void (Dtor)(void*);
-typedef struct Resource Resource;
-typedef struct ResourceStack ResourceStack;
+typedef struct resource_t resource_t;
+typedef struct resource_stack_t resource_stack_t;
 
 // Functions
-ResourceStack* new_resource_stack();
-void push_resource(ResourceStack* rss, void* ptr,Dtor* dtor);
-void destroy_resource(ResourceStack* rss, void* ptr);
-void update_resource(ResourceStack* rss, void* old_ptr, void* new_ptr);
-void clear_resource_stack(ResourceStack* rss);
-void destroy_resource_stack(ResourceStack* rss);
-ResourceStack* global_resources();
+resource_stack_t* new_resource_stack();
+void push_resource(resource_stack_t* rss, void* ptr,Dtor* dtor);
+void destroy_resource(resource_stack_t* rss, void* ptr);
+void update_resource(resource_stack_t* rss, void* old_ptr, void* new_ptr);
+void clear_resource_stack(resource_stack_t* rss);
+void destroy_resource_stack(resource_stack_t* rss);
+resource_stack_t* global_resources();
 
 // Globals
-extern ResourceStack* g_resources;
+extern resource_stack_t* g_resources;
 
 // Macros for global resource stack
 #define G_FREE(ptr) \
@@ -38,6 +38,13 @@ extern ResourceStack* g_resources;
 
 #define G_RETURN \
   destroy_resource_stack(global_resources());\
-  return 0;\
+  return EXIT_SUCCESS;\
+
+#define VERIFY_ALLOC(ptr, type) \
+	if (ptr == NULL) {\
+		fprintf(stderr, "Could not allocate memory for %s\n", type);\
+		G_FREE_STACK;\
+		exit(EXIT_FAILURE);\
+	}\
 
 #endif

@@ -2,7 +2,7 @@
 #include "resource.h"
 #include "util.h"
 
-int colors_equal(Color* a, Color* b) {
+int colors_equal(color_t* a, color_t* b) {
 	int nr = float_equals(a->r,b->r);
 	int ng = float_equals(a->g,b->g);
 	int nb = float_equals(a->b,b->b);
@@ -10,15 +10,18 @@ int colors_equal(Color* a, Color* b) {
 	return nr && ng && nb;
 }
 
-Color* new_color(float r, float g, float b) {
-	Color* c = calloc(1,sizeof(Color));
+color_t* new_color(float r, float g, float b) {
+	color_t* c;
+	c = malloc(sizeof(color_t));
+	VERIFY_ALLOC(c,"color_t");
+
 	c->r = r; c->g = g; c->b = b;
 
 	G_PUSH(c,free); // NOTE: Might be incorrect destructor
 	return c;
 }
 
-Color* add_colors(Color* a, Color* b) {
+color_t* add_colors(color_t* a, color_t* b) {
 	float nr = a->r + b->r;
 	float ng = a->g + b->g;
 	float nb = a->b + b->b;
@@ -26,7 +29,7 @@ Color* add_colors(Color* a, Color* b) {
 	return new_color(nr,ng,nb);
 }
 
-Color* sub_colors(Color* a, Color* b) {
+color_t* sub_colors(color_t* a, color_t* b) {
 	float nr = a->r - b->r;
 	float ng = a->g - b->g;
 	float nb = a->b - b->b;
@@ -34,7 +37,7 @@ Color* sub_colors(Color* a, Color* b) {
 	return new_color(nr,ng,nb);
 }
 
-Color* mult_colors(Color* a, Color* b) {
+color_t* mult_colors(color_t* a, color_t* b) {
 	float nr = a->r * b->r;
 	float ng = a->g * b->g;
 	float nb = a->b * b->b;
@@ -42,7 +45,7 @@ Color* mult_colors(Color* a, Color* b) {
 	return new_color(nr,ng,nb);
 }
 
-Color* scale_color(Color* a, float s) {
+color_t* scale_color(color_t* a, float s) {
 	float nr = a->r * s;
 	float ng = a->g * s;
 	float nb = a->b * s;
@@ -50,14 +53,21 @@ Color* scale_color(Color* a, float s) {
 	return new_color(nr,ng,nb);
 }
 
-Canvas* new_canvas(int nw, int nh) {
-	Canvas* c = calloc(1,sizeof(Canvas));
+canvas_t* new_canvas(int nw, int nh) {
+	canvas_t* c;
+	c = malloc(sizeof(canvas_t));
+	VERIFY_ALLOC(c,"canvas_t*");
+
 	c->w = nw; c->h = nh;
 
-	Color*** pixels = calloc(1,sizeof(Color)*nw*nh);
-	Color** row = NULL;
+	color_t*** pixels;
+	pixels = calloc(1,sizeof(color_t)*nw*nh);
+	VERIFY_ALLOC(pixels,"canvas_t***");
+
+	color_t** row;
 	for (int i=0;i<nh;i++) {
-		row = calloc(1,sizeof(Color)*nw);
+		row = calloc(1,sizeof(color_t)*nw);
+		VERIFY_ALLOC(row,"canvas_t**");
 		for (int j=0;j<nw;j++) {
 			row[j] = BLACK_COLOR;
 		}
@@ -69,7 +79,7 @@ Canvas* new_canvas(int nw, int nh) {
 	return c;
 }
 
-void free_canvas(Canvas* c) {
+void free_canvas(canvas_t* c) {
 	for (int i=0;i<c->h;i++) {
 		for (int j=0;j<c->w;j++) {
 			if ((c->pixels)[i][j] != NULL) {
@@ -82,16 +92,17 @@ void free_canvas(Canvas* c) {
 	free(c);
 }
 
-void write_pixel(Canvas* c, int row, int col, Color* color) {
+void write_pixel(canvas_t* c, int row, int col, color_t* color) {
 	//G_UPDATE((c->pixels)[row][col],color); // Would like to get this to work
 
 	G_FREE((c->pixels)[row][col]);
 	(c->pixels)[row][col] = color;
 }
 
-char* canvas_to_ppm(Canvas* c) {
+char* canvas_to_ppm(canvas_t* c) {
 	char* buf = calloc(1,
 			(sizeof(char)*13*c->w*c->h)+64); // Verify this is the right calculation
+	VERIFY_ALLOC(buf,"char*");
 
 	sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
 
