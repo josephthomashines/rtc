@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "primitives.h"
-#include "resource.h"
+
 
 void primitive_demo(char* filename);
 

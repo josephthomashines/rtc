@@ -1,5 +1,5 @@
 #include "canvas.h"
-#include "resource.h"
+
 #include "util.h"
 
 int colors_equal(color_t* a, color_t* b) {
@@ -17,7 +17,6 @@ color_t* new_color(float r, float g, float b) {
 
 	c->r = r; c->g = g; c->b = b;
 
-	G_PUSH(c,free); // NOTE: Might be incorrect destructor
 	return c;
 }
 
@@ -75,7 +74,7 @@ canvas_t* new_canvas(int nw, int nh) {
 	}
 	c->pixels = pixels;
 
-	G_PUSH(c,free_canvas);
+
 	return c;
 }
 
@@ -83,7 +82,7 @@ void free_canvas(canvas_t* c) {
 	for (int i=0;i<c->h;i++) {
 		for (int j=0;j<c->w;j++) {
 			if ((c->pixels)[i][j] != NULL) {
-				G_FREE((c->pixels)[i][j]);
+				free((c->pixels)[i][j]);
 			}
 		}
 		free((c->pixels)[i]);
@@ -97,12 +96,13 @@ void write_pixel(canvas_t* c, int row, int col, color_t* color) {
 
 	if ((row >= 0 && row < c->h) &&
 			(col >= 0 && col < c->w)) {
-		G_FREE((c->pixels)[row][col]);
+
+		free((c->pixels)[row][col]);
 		(c->pixels)[row][col] = color;
 	/*} else {
 		fprintf(stderr, "Invalid write to canvas of shape (%d,%d) at (%d,%d)\n",
 				c->h,c->w,row,col);
-		G_CLEAR_STACK;
+
 		exit(EXIT_FAILURE);*/
 	}
 }
@@ -149,7 +149,7 @@ char* canvas_to_ppm(canvas_t* c) {
 		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
 	}
 
-	G_PUSH(buf,free)
+
 	return buf;
 }
 
@@ -169,7 +169,7 @@ static inline void fadd_int_to_ppm(char* buf, int* bb_written, float value, int*
 
 void canvas_to_ppm_file(canvas_t* c, char* filename) {
 	// Verify this is the right calculation
-	int ALLOC_BYTES = 64;
+	int ALLOC_BYTES = 2048;
 	char* buf;
 	buf = calloc(1,ALLOC_BYTES);
 	int n = sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
@@ -181,12 +181,11 @@ void canvas_to_ppm_file(canvas_t* c, char* filename) {
 
 	if (fptr == NULL) {
 		fprintf(stderr,"Error opening %s\n",filename);
-		G_FREE_STACK;
 		exit(EXIT_FAILURE);
 	}
 
 	int row_width = 0;
-	int row_cutoff = 70;
+	int row_cutoff = 30;
 	int bb_written = n;
 	int fb_written = 0;
 	for (int i=0;i<c->h;i++) {
@@ -204,12 +203,10 @@ void canvas_to_ppm_file(canvas_t* c, char* filename) {
 				memset(buf,0,ALLOC_BYTES);
 			}
 		}
-		printf("Outer loop %d\n",i);
 	}
 
 	fseek(fptr,0,fb_written);
 	fprintf(fptr,buf);
-	printf("Done");
 
 	free(buf);
 	fclose(fptr);

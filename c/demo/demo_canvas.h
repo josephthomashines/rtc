@@ -7,7 +7,7 @@
 
 #include "canvas.h"
 #include "primitives.h"
-#include "resource.h"
+
 
 void canvas_demo(char* filename);
 

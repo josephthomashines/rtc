@@ -4,8 +4,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "resource.h"
-
 #include "demo_canvas.h"
 #include "demo_primitives.h"
 
@@ -49,7 +47,7 @@ int main(int argc, char* argv[]) {
 							break;
 					case 'h':
 							print_help();
-							G_RETURN;
+							return EXIT_SUCCESS;
 					case '?':
 					default:
 							fprintf(stderr,"unknown option: %c\n", optopt);
@@ -61,14 +59,14 @@ int main(int argc, char* argv[]) {
 		for (int i=0;i<NUM_COMMANDS;i++) {
 			if (strcmp(commands[i].name,demo) == 0) {
 				commands[i].function(filename);
-				G_RETURN;
+				return EXIT_SUCCESS;
 			}
 		}
 		fprintf(stderr,"unknown demo: %s\n", demo);
 		print_help();
-		G_RETURN;
+		return EXIT_FAILURE;
 	}
 
 	print_help();
-	G_RETURN;
+	return EXIT_SUCCESS;
 }

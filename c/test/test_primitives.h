@@ -9,7 +9,7 @@
 #include "test_helpers.h"
 
 #include "primitives.h"
-#include "resource.h"
+
 #include "util.h"
 
 // Macros for primitives
@@ -31,7 +31,7 @@ START_TEST (test_new_primitive) {
   TEST_TWO_PRIMITIVES(vec,solution);
   ck_assert(is_vector(vec));
 
-  G_FREE_STACK;
+
 } END_TEST
 
 START_TEST (test_primitive_operations) {
@@ -61,7 +61,7 @@ START_TEST (test_primitive_operations) {
   primitive_t* pointMinusVec = sub_primitives(p1,vec);
   solution = new_point(-2,-4,-6);
   TEST_TWO_PRIMITIVES(pointMinusVec,solution);
-  G_CLEAR_STACK;
+
 
   primitive_t* v1 = new_vector(3,2,1);
   primitive_t* v2 = new_vector(5,6,7);
@@ -76,7 +76,7 @@ START_TEST (test_primitive_operations) {
 
   primitive_t* bv1 = negate_primitive(nv1);
   TEST_TWO_PRIMITIVES(v1,bv1);
-  G_CLEAR_STACK;
+
 
   // Scaling
   primitive_t* prim = new_primitive(1,-2,3,-4);
@@ -84,7 +84,7 @@ START_TEST (test_primitive_operations) {
   primitive_t* sol2 = new_primitive(0.5,-1,1.5,-2);
   TEST_TWO_PRIMITIVES(scale_primitive(prim,3.5),sol1);
   TEST_TWO_PRIMITIVES(scale_primitive(prim,0.5),sol2);
-  G_CLEAR_STACK;
+
 
   // Magnitude
   v1 = new_vector(1,0,0);
@@ -98,7 +98,7 @@ START_TEST (test_primitive_operations) {
   ck_assert(float_equals(magnitude_vector(v3),1));
   ck_assert(float_equals(magnitude_vector(v4),sqrt(14)));
   ck_assert(float_equals(magnitude_vector(v5),sqrt(14)));
-  G_CLEAR_STACK;
+
 
   // Normalize
   v1 = new_vector(4,0,0);
@@ -109,7 +109,7 @@ START_TEST (test_primitive_operations) {
   TEST_TWO_PRIMITIVES(normalize_vector(v2),sol2);
   ck_assert(float_equals(magnitude_vector(normalize_vector(v1)),1));
   ck_assert(float_equals(magnitude_vector(normalize_vector(v2)),1));
-  G_CLEAR_STACK;
+
 
   // Dot product
   primitive_t* a = new_vector(1,2,3);
@@ -122,7 +122,7 @@ START_TEST (test_primitive_operations) {
   TEST_TWO_PRIMITIVES(cross_vectors(a,b),sol1);
   TEST_TWO_PRIMITIVES(cross_vectors(b,a),sol2);
 
-  G_FREE_STACK;
+
 } END_TEST
 
 TEST_SUITE(primitives,{

@@ -19,12 +19,12 @@ void primitive_demo(char* filename) {
   projectile_t* p = calloc(1,sizeof(projectile_t));
   p->position = new_point(0,1,0);
   p->velocity = scale_primitive(normalize_vector(new_vector(1,1,0)),1);
-  G_PUSH(p,free);
+  
 
   environment_t* e = calloc(1,sizeof(environment_t));
   e->gravity = new_vector(0,-0.1,0);
   e->wind = new_vector(-0.01,0,0);
-  G_PUSH(e,free);
+  
 
 	int tick_count = 0;
 	printf("Launching projectile...\n");
@@ -37,5 +37,5 @@ void primitive_demo(char* filename) {
 	p->position->values[1] = 0;
 	printf("---- Crashed at %s after %d ticks ----\n", to_string(p->position),tick_count);
 
-  G_CLEAR_STACK;
+  
 }

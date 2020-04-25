@@ -1,5 +1,4 @@
 #include "primitives.h"
-#include "resource.h"
 #include "util.h"
 
 // A basic primitive is just a list of float values
@@ -30,7 +29,6 @@ primitive_t* new_primitive(float x, float y, float z, float w) {
 
   p->values = values;
 
-  G_PUSH(p,free_primitive);
   return p;
 }
 
@@ -77,7 +75,7 @@ char* to_string(primitive_t* p) {
     }
   }
 
-  G_PUSH(out,free);
+  
   return out;
 }
 

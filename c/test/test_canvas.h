@@ -9,7 +9,6 @@
 #include "test_helpers.h"
 
 #include "canvas.h"
-#include "resource.h"
 #include "util.h"
 
 #define COLORS_EQUAL(a,b) \
@@ -23,7 +22,7 @@ START_TEST (test_new_color) {
 	ck_assert_msg(float_equals(c->g,0.4),"Green is set correctly");
 	ck_assert_msg(float_equals(c->b,1.7),"Blue is set correctly");
 
-	G_FREE_STACK;
+
 } END_TEST
 
 START_TEST (test_color_operations) {
@@ -37,7 +36,7 @@ START_TEST (test_color_operations) {
 	COLORS_EQUAL(new_color(0.4,0.6,0.8),scale_color(c3,2));
 	COLORS_EQUAL(new_color(0.9,0.2,0.04),mult_colors(c4,c5));
 
-	G_FREE_STACK;
+
 } END_TEST
 
 START_TEST (test_new_canvas) {
@@ -49,7 +48,7 @@ START_TEST (test_new_canvas) {
 		}
 	}
 
-	G_FREE_STACK;
+
 } END_TEST
 
 START_TEST (test_canvas_operations) {
@@ -58,13 +57,13 @@ START_TEST (test_canvas_operations) {
 	write_pixel(c,2,3,red);
 
 	COLORS_EQUAL((c->pixels)[2][3],red);
-	G_CLEAR_STACK;
+
 
 	c = new_canvas(5,3);
   char* cstr;
   cstr = canvas_to_ppm(c);
 	ck_assert(strstr(cstr,"P3\n5 3\n255\n") != NULL);
-  G_CLEAR_STACK;
+
 
 	c = new_canvas(10,2);
   color_t* col = new_color(1.0,0.8,0.6);
@@ -78,7 +77,7 @@ START_TEST (test_canvas_operations) {
 	ck_assert(strstr(cstr,"255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n153 255 204 153 255 204 153 255 204 153 255 204 153") != NULL);
   ck_assert(cstr[strlen(cstr)-1] == '\n');
 
-	G_FREE_STACK;
+
 } END_TEST
 
 TEST_SUITE(canvas,{
