@@ -20,6 +20,8 @@ color_t* new_color(float r, float g, float b) {
 	return c;
 }
 
+void free_color(color_t* c) {free(c);}
+
 color_t* add_colors(color_t* a, color_t* b) {
 	float nr = a->r + b->r;
 	float ng = a->g + b->g;
@@ -82,7 +84,7 @@ void free_canvas(canvas_t* c) {
 	for (int i=0;i<c->h;i++) {
 		for (int j=0;j<c->w;j++) {
 			if ((c->pixels)[i][j] != NULL) {
-				free((c->pixels)[i][j]);
+				free_color((c->pixels)[i][j]);
 			}
 		}
 		free((c->pixels)[i]);
@@ -96,14 +98,8 @@ void write_pixel(canvas_t* c, int row, int col, color_t* color) {
 
 	if ((row >= 0 && row < c->h) &&
 			(col >= 0 && col < c->w)) {
-
-		free((c->pixels)[row][col]);
+		free_color((c->pixels)[row][col]);
 		(c->pixels)[row][col] = color;
-	/*} else {
-		fprintf(stderr, "Invalid write to canvas of shape (%d,%d) at (%d,%d)\n",
-				c->h,c->w,row,col);
-
-		exit(EXIT_FAILURE);*/
 	}
 }
 

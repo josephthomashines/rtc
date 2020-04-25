@@ -22,6 +22,7 @@ typedef struct canvas_t {
 
 // Functions
 color_t* new_color(float r, float g, float b);
+void free_color(color_t* c);
 int colors_equal(color_t* a, color_t* b);
 color_t* add_colors(color_t* a, color_t* b);
 color_t* sub_colors(color_t* a, color_t* b);

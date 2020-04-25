@@ -25,13 +25,16 @@ START_TEST (test_new_primitive) {
   primitive_t* solution = new_primitive(4.3,-4.2,3.1,1.0);
   TEST_TWO_PRIMITIVES(point,solution);
   ck_assert(is_point(point));
+	free_primitive(point);
+	free_primitive(solution);
 
   primitive_t* vec = new_vector(4.3,-4.2,3.1);
   solution = new_primitive(4.3,-4.2,3.1,0);
   TEST_TWO_PRIMITIVES(vec,solution);
   ck_assert(is_vector(vec));
 
-
+	free_primitive(vec);
+	free_primitive(solution);
 } END_TEST
 
 START_TEST (test_primitive_operations) {
@@ -42,13 +45,17 @@ START_TEST (test_primitive_operations) {
   primitive_t* pointPlusVec = add_primitives(point,vec);
   primitive_t* solution  = new_primitive(2,4,6,1);
   TEST_TWO_PRIMITIVES(pointPlusVec,solution);
+	free_primitive(pointPlusVec);
 
   primitive_t* vecPlusPoint = add_primitives(vec,point);
   TEST_TWO_PRIMITIVES(vecPlusPoint,solution);
+	free_primitive(vecPlusPoint); free_primitive(solution);
 
   primitive_t* vecPlusVec = add_primitives(vec,vec);
   solution  = new_primitive(2,4,6,0);
   TEST_TWO_PRIMITIVES(vecPlusVec,solution);
+	free_primitive(vecPlusVec); free_primitive(solution);
+	free_primitive(point); free_primitive(vec);
 
   // Subtraction
   primitive_t* p1 = new_point(3,2,1);
@@ -56,27 +63,33 @@ START_TEST (test_primitive_operations) {
   primitive_t* pointMinusPoint = sub_primitives(p1,p2);
   solution = new_vector(-2,-4,-6);
   TEST_TWO_PRIMITIVES(pointMinusPoint,solution);
+	free_primitive(solution); free_primitive(pointMinusPoint);
 
   vec = new_vector(5,6,7);
   primitive_t* pointMinusVec = sub_primitives(p1,vec);
   solution = new_point(-2,-4,-6);
   TEST_TWO_PRIMITIVES(pointMinusVec,solution);
-
+	free_primitive(solution); free_primitive(vec);
+	free_primitive(pointMinusVec);
 
   primitive_t* v1 = new_vector(3,2,1);
   primitive_t* v2 = new_vector(5,6,7);
   primitive_t* vecMinusVec = sub_primitives(v1,v2);
   solution = new_vector(-2,-4,-6);
   TEST_TWO_PRIMITIVES(vecMinusVec,solution);
+	free_primitive(solution); free_primitive(vecMinusVec);
 
   // Negation
   primitive_t* nv1 = negate_primitive(v1);
   solution = new_vector(-3,-2,-1);
   TEST_TWO_PRIMITIVES(nv1,solution);
+	free_primitive(solution);
 
   primitive_t* bv1 = negate_primitive(nv1);
   TEST_TWO_PRIMITIVES(v1,bv1);
-
+	free_primitive(nv1); free_primitive(bv1);
+	free_primitive(p1); free_primitive(p2);
+	free_primitive(v1); free_primitive(v2);
 
   // Scaling
   primitive_t* prim = new_primitive(1,-2,3,-4);
@@ -84,6 +97,8 @@ START_TEST (test_primitive_operations) {
   primitive_t* sol2 = new_primitive(0.5,-1,1.5,-2);
   TEST_TWO_PRIMITIVES(scale_primitive(prim,3.5),sol1);
   TEST_TWO_PRIMITIVES(scale_primitive(prim,0.5),sol2);
+	free_primitive(prim);
+	free_primitive(sol1); free_primitive(sol2);
 
 
   // Magnitude
@@ -98,6 +113,8 @@ START_TEST (test_primitive_operations) {
   ck_assert(float_equals(magnitude_vector(v3),1));
   ck_assert(float_equals(magnitude_vector(v4),sqrt(14)));
   ck_assert(float_equals(magnitude_vector(v5),sqrt(14)));
+	free_primitive(v1); free_primitive(v2); free_primitive(v3);
+	free_primitive(v4); free_primitive(v5);
 
 
   // Normalize
@@ -109,6 +126,8 @@ START_TEST (test_primitive_operations) {
   TEST_TWO_PRIMITIVES(normalize_vector(v2),sol2);
   ck_assert(float_equals(magnitude_vector(normalize_vector(v1)),1));
   ck_assert(float_equals(magnitude_vector(normalize_vector(v2)),1));
+	free_primitive(v1); free_primitive(v2);
+	free_primitive(sol1); free_primitive(sol2);
 
 
   // Dot product
@@ -117,11 +136,15 @@ START_TEST (test_primitive_operations) {
   ck_assert(float_equals(dot_vectors(a,b),20));
 
   // Cross product
+	v1 = cross_vectors(a,b);
+	v2 = cross_vectors(b,a);
   sol1 = new_vector(-1,2,-1);
   sol2 = new_vector(1,-2,1);
-  TEST_TWO_PRIMITIVES(cross_vectors(a,b),sol1);
-  TEST_TWO_PRIMITIVES(cross_vectors(b,a),sol2);
-
+  TEST_TWO_PRIMITIVES(v1,sol1);
+  TEST_TWO_PRIMITIVES(v2,sol2);
+	free_primitive(a); free_primitive(b);
+	free_primitive(v1); free_primitive(v2);
+	free_primitive(sol1); free_primitive(sol2);
 
 } END_TEST
 
