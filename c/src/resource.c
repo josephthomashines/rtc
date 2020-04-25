@@ -41,18 +41,20 @@ void destroy_resource(resource_stack_t* rss, void* ptr) {
   resource_t* next = NULL;
 
   while (curr != NULL) {
+    next = curr->next;
     if (curr->ptr == ptr) {
+			printf("Destroying resource...");
       curr->dtor(ptr);
       free(curr);
       if (prev != NULL) {
         prev->next = next;
-      }
-      rss->top = NULL;
+      } else {
+				rss->top = next;
+			}
       break;
     }
     prev = curr;
-    curr = curr->next;
-    next = curr->next;
+    curr = next;
   }
 }
 
@@ -78,7 +80,7 @@ void update_resource(resource_stack_t* rss, void* old_ptr, void* new_ptr) {
 // Clear the whole stack
 void clear_resource_stack(resource_stack_t* rss) {
   if (rss != NULL) {
-    resource_t* curr = rss->top;
+    /*resource_t* curr = rss->top;
     resource_t* next = NULL;
 
     while (curr != NULL) {
@@ -88,7 +90,15 @@ void clear_resource_stack(resource_stack_t* rss) {
 			}
       free(curr);
       curr = next;
-    }
+    }*/
+
+    resource_t* curr = rss->top;
+		resource_t* next = NULL;
+		while (curr != NULL) {
+			next = curr->next;
+			destroy_resource(rss,curr);
+			curr = next;
+		}
   }
 
   rss->top = NULL;

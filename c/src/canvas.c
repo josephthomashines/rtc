@@ -95,26 +95,123 @@ void free_canvas(canvas_t* c) {
 void write_pixel(canvas_t* c, int row, int col, color_t* color) {
 	//G_UPDATE((c->pixels)[row][col],color); // Would like to get this to work
 
-	G_FREE((c->pixels)[row][col]);
-	(c->pixels)[row][col] = color;
+	if ((row >= 0 && row < c->h) &&
+			(col >= 0 && col < c->w)) {
+		G_FREE((c->pixels)[row][col]);
+		(c->pixels)[row][col] = color;
+	/*} else {
+		fprintf(stderr, "Invalid write to canvas of shape (%d,%d) at (%d,%d)\n",
+				c->h,c->w,row,col);
+		G_CLEAR_STACK;
+		exit(EXIT_FAILURE);*/
+	}
+}
+
+static inline int scale_and_clip_color(float f) {
+	int o = (int)(f*255.0);
+
+	if (o > 255) o = 255;
+	if (o < 0) o = 0;
+
+	return o;
+}
+
+static inline int add_int_to_ppm(char* buf, float value, int row_width, int row_cutoff) {
+	if (row_width < (row_cutoff - 8)) {
+		int n = sprintf(buf+strlen(buf),"%d ",scale_and_clip_color(value));
+		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
+		return row_width + n;
+	} else {
+		int n = sprintf(buf+strlen(buf),"%d\n",scale_and_clip_color(value));
+		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
+		return 0;
+	}
 }
 
 char* canvas_to_ppm(canvas_t* c) {
-	char* buf = calloc(1,
-			(sizeof(char)*13*c->w*c->h)+64); // Verify this is the right calculation
+	// Verify this is the right calculation
+	int ALLOC_BYTES = (sizeof(char)*13*c->w*c->h)+16;
+	char* buf = calloc(1,ALLOC_BYTES);
 	VERIFY_ALLOC(buf,"char*");
 
 	sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
 
-  // int n = sprintf(buf+strlen(buf),"");
-	// CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
-	// TODO: Print colors
-	//       TODO: Scale and clip colors to 0-255
-	//       TODO: Wrap lines longer than 70 characters
-
-	// TODO: Ensure the file ends with one new line
+	int row_width = 0;
+	int row_cutoff = 70;
+	for (int i=0;i<c->h;i++) {
+		row_width = 0;
+		for (int j=0;j<c->w;j++) {
+			row_width = add_int_to_ppm(buf,(c->pixels)[i][j]->r,row_width,row_cutoff);
+			row_width = add_int_to_ppm(buf,(c->pixels)[i][j]->g,row_width,row_cutoff);
+			row_width = add_int_to_ppm(buf,(c->pixels)[i][j]->b,row_width,row_cutoff);
+		}
+		int n = sprintf(buf+strlen(buf),"\n");
+		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
+	}
 
 	G_PUSH(buf,free)
 	return buf;
+}
+
+static inline void fadd_int_to_ppm(char* buf, int* bb_written, float value, int* row_width, int row_cutoff) {
+	if ((*row_width) < (row_cutoff - 8)) {
+		int n = sprintf(buf+(*bb_written),"%d ",scale_and_clip_color(value));
+		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
+		*bb_written += n;
+		*row_width += n;
+	} else {
+		int n = sprintf(buf+(*bb_written),"%d\n",scale_and_clip_color(value));
+		CHECK_SPRINTF(n,"Could not convert canvas to ppm\n");
+		*bb_written += n;
+		*row_width = 0;
+	}
+}
+
+void canvas_to_ppm_file(canvas_t* c, char* filename) {
+	// Verify this is the right calculation
+	int ALLOC_BYTES = 64;
+	char* buf;
+	buf = calloc(1,ALLOC_BYTES);
+	int n = sprintf(buf,"P3\n%d %d\n255\n",c->w,c->h);
+	VERIFY_ALLOC(buf,"char*");
+
+	FILE* fptr;
+	fptr = fopen(filename,"w");
+	fprintf(stdout,"Opening %s\n",filename);
+
+	if (fptr == NULL) {
+		fprintf(stderr,"Error opening %s\n",filename);
+		G_FREE_STACK;
+		exit(EXIT_FAILURE);
+	}
+
+	int row_width = 0;
+	int row_cutoff = 70;
+	int bb_written = n;
+	int fb_written = 0;
+	for (int i=0;i<c->h;i++) {
+		row_width = 0;
+		for (int j=0;j<c->w;j++) {
+			fadd_int_to_ppm(buf,&bb_written,(c->pixels)[i][j]->r,&row_width,row_cutoff);
+			fadd_int_to_ppm(buf,&bb_written,(c->pixels)[i][j]->g,&row_width,row_cutoff);
+			fadd_int_to_ppm(buf,&bb_written,(c->pixels)[i][j]->b,&row_width,row_cutoff);
+
+			if (strlen(buf) > (ALLOC_BYTES - 32)) {
+				fseek(fptr,0,fb_written);
+				fprintf(fptr,buf);
+				fb_written += strlen(buf);
+				bb_written = 0;
+				memset(buf,0,ALLOC_BYTES);
+			}
+		}
+		printf("Outer loop %d\n",i);
+	}
+
+	fseek(fptr,0,fb_written);
+	fprintf(fptr,buf);
+	printf("Done");
+
+	free(buf);
+	fclose(fptr);
 }
 

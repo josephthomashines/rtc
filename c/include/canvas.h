@@ -32,6 +32,7 @@ canvas_t* new_canvas(int nw, int nh);
 void free_canvas(canvas_t* c);
 void write_pixel(canvas_t* c, int row, int col, color_t* color);
 char* canvas_to_ppm(canvas_t* c);
+void canvas_to_ppm_file(canvas_t* c, char* filename);
 
 // Globals
 #define BLACK_COLOR \

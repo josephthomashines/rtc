@@ -5,6 +5,8 @@
 #include <unistd.h>
 
 #include "resource.h"
+
+#include "demo_canvas.h"
 #include "demo_primitives.h"
 
 #define COMMAND(NAME)  { #NAME, NAME ## _demo }
@@ -14,8 +16,9 @@ struct command {
 	void (*function) (char*);
 };
 
-#define NUM_COMMANDS 1
+#define NUM_COMMANDS 2
 struct command commands[NUM_COMMANDS] = {
+	COMMAND (canvas),
 	COMMAND (primitive),
 };
 
@@ -24,6 +27,7 @@ void print_help() {
 	printf("\t-h\t\tshow this menu\n");
 	printf("\t-f FILE\t\tpass a filename for commands that use it\n");
 	printf("\t-d DEMO\t\tspecify a demo to run\n");
+	printf("\t\t\tcanvas\n");
 	printf("\t\t\tprimitive\n");
 	//printf("\t \t\t \n");
 }

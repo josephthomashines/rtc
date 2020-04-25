@@ -57,16 +57,26 @@ START_TEST (test_canvas_operations) {
 	color_t* red = new_color(1,0,0);
 	write_pixel(c,2,3,red);
 
-	fprintf(stderr,"%f %f %f\n",
-			((c->pixels)[2][3])->r,
-			((c->pixels)[2][3])->g,
-			((c->pixels)[2][3])->b);
-
 	COLORS_EQUAL((c->pixels)[2][3],red);
 	G_CLEAR_STACK;
 
 	c = new_canvas(5,3);
-	ck_assert(strcmp(canvas_to_ppm(c),"P3\n5 3\n255\n") == 0);
+  char* cstr;
+  cstr = canvas_to_ppm(c);
+	ck_assert(strstr(cstr,"P3\n5 3\n255\n") != NULL);
+  G_CLEAR_STACK;
+
+	c = new_canvas(10,2);
+  color_t* col = new_color(1.0,0.8,0.6);
+  for (int i=0;i<2;i++) {
+    for (int j=0;j<10;j++) {
+      write_pixel(c,i,j,col);
+    }
+  }
+
+  cstr = canvas_to_ppm(c);
+	ck_assert(strstr(cstr,"255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n153 255 204 153 255 204 153 255 204 153 255 204 153") != NULL);
+  ck_assert(cstr[strlen(cstr)-1] == '\n');
 
 	G_FREE_STACK;
 } END_TEST
