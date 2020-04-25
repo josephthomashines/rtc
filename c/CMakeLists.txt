@@ -38,6 +38,7 @@ add_custom_target(clean-all
                        ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
                        ${CMAKE_BINARY_DIR}/Testing
                        ${CMAKE_BINARY_DIR}/vgcore.*
+                       ${CMAKE_BINARY_DIR}/*.ppm
              && rmdir  ${CMAKE_BINARY_DIR}/out
 )
 

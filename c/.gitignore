@@ -12,3 +12,4 @@ Testing
 Testing/
 Testing/*
 vgcore*
+*.ppm
