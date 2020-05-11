@@ -105,7 +105,7 @@ matrixDeterminant m
 
 -- Get a submatrix of size N-1 for an arbitrarily sized matrix
 subMatrix :: Int -> Int -> Matrix -> Matrix
-subMatrix row col m = removeN row $ map (removeN col) m
+subMatrix !row !col !m = removeN row $ map (removeN col) m
 
 -- Get the minor at row,col
 matrixMinor :: Int -> Int -> Matrix -> Float

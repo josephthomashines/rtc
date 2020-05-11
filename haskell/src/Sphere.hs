@@ -43,16 +43,16 @@ sphereTransform s t = Sphere id t1 t2 m
 
 -- Get the normal vector at a point on the sphere
 sphereNormalAt :: Sphere -> Point -> Point
-sphereNormalAt s p =
+sphereNormalAt !s !p =
   normalizePoint $
     Point (x worldNormal) (y worldNormal) (z worldNormal) 0
   where
-    worldPoint = matrixFromPoint p
-    sphereTrans = matrixMult (translate s) (transform s)
-    objectPoint = pointFromMatrix $
+    !worldPoint = matrixFromPoint p
+    !sphereTrans = matrixMult (translate s) (transform s)
+    !objectPoint = pointFromMatrix $
       matrixMult (matrixInverse sphereTrans) (worldPoint)
-    objectNormal = matrixFromPoint $ subPoints objectPoint $ makePoint 0 0 0
-    worldNormal =
+    !objectNormal = matrixFromPoint $ subPoints objectPoint $ makePoint 0 0 0
+    !worldNormal =
       pointFromMatrix $ matrixMult (matrixTranspose $ matrixInverse sphereTrans) (objectNormal)
 
 -- Set sphere material

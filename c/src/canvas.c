@@ -173,7 +173,7 @@ void canvas_to_ppm_file(canvas_t* c, char* filename) {
 
 	FILE* fptr;
 	fptr = fopen(filename,"w");
-	fprintf(stdout,"Opening %s\n",filename);
+	fprintf(stdout,"Saving to %s\n",filename);
 
 	if (fptr == NULL) {
 		fprintf(stderr,"Error opening %s\n",filename);

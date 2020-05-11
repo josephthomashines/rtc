@@ -3,9 +3,9 @@ module Color where
 import Util (floatEqual)
 
 -- Data type for RGB color
-data Color = Color {r :: Float
-                   ,g :: Float
-                   ,b :: Float
+data Color = Color {r :: !Float
+                   ,g :: !Float
+                   ,b :: !Float
                    }
   deriving (Show)
 
@@ -27,32 +27,32 @@ white = makeColor 1 1 1
 
 -- Add colors
 addColors :: Color -> Color -> Color
-addColors c1 c2 = makeColor nr ng nb
+addColors c1@(Color !r1 !g1 !b1) c2@(Color !r2 !g2 !b2) = makeColor nr ng nb
   where
-    nr = (r c1) + (r c2)
-    ng = (g c1) + (g c2)
-    nb = (b c1) + (b c2)
+    nr = r1 + r2
+    ng = g1 + g2
+    nb = b1 + b2
 
 -- Subtract colors
 subColors :: Color -> Color -> Color
-subColors c1 c2 = makeColor nr ng nb
+subColors c1@(Color !r1 !g1 !b1) c2@(Color !r2 !g2 !b2) = makeColor nr ng nb
   where
-    nr = (r c1) - (r c2)
-    ng = (g c1) - (g c2)
-    nb = (b c1) - (b c2)
+    nr = r1 - r2
+    ng = g1 - g2
+    nb = b1 - b2
 
 -- Multiply (blend) colors
 multColors :: Color -> Color -> Color
-multColors c1 c2 = makeColor nr ng nb
+multColors c1@(Color !r1 !g1 !b1) c2@(Color !r2 !g2 !b2) = makeColor nr ng nb
   where
-    nr = (r c1) * (r c2)
-    ng = (g c1) * (g c2)
-    nb = (b c1) * (b c2)
+    nr = r1 * r2
+    ng = g1 * g2
+    nb = b1 * b2
 
 -- Scale color
 scaleColor :: Float -> Color -> Color
-scaleColor s c = makeColor nr ng nb
+scaleColor s c@(Color !cr !cg !cb) = makeColor nr ng nb
   where
-    nr = s * (r c)
-    ng = s * (g c)
-    nb = s * (b c)
+    nr = s * cr
+    ng = s * cg
+    nb = s * cb

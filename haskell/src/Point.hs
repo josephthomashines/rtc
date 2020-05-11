@@ -95,8 +95,8 @@ crossPoints (Point ax ay az _) (Point bx by bz _) =
 
 -- Reflect a vector "around" another
 reflectVector :: Point -> Point -> Point
-reflectVector normal v =
+reflectVector normal@(Point !x1 !y1 !z1 !w1) v@(Point !x2 !y2 !z2 !w2) =
   subPoints v n
   where
-    d = (*2) $ dotPoints v normal
-    n = scalePoint d normal
+    !d = (*2) $ dotPoints v normal
+    !n = scalePoint d normal

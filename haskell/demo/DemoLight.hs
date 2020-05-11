@@ -10,19 +10,20 @@ import Ray
 import Sphere
 import Transform
 
+import Data.List
 import Data.Maybe
 
 wallZ = 10
 wallSize = 7
 rayOrigin = makePoint 0 0 (-5)
-canvasPixels = 500
+canvasPixels = 2000
 canvasBound = canvasPixels - 1
 pixelSize = wallSize / canvasPixels
 half = wallSize / 2
 
-data CastingRay = CastingRay {ray :: Ray
-                             ,px :: Int
-                             ,py :: Int
+data CastingRay = CastingRay {ray :: !Ray
+                             ,px :: !Int
+                             ,py :: !Int
                              }
 
 posFromXY :: Float -> Float -> Point
@@ -42,22 +43,20 @@ castingRayFromXY (x,y) =
 
 -- Determine if a specific ray casts a pixel onto the canvas
 castRay :: CastingRay -> Sphere -> PointLight -> Canvas -> Canvas
-castRay cr s pl ca =
+castRay cr@(CastingRay !r !px1 !py1) !s !pl ca =
   case h of
     Just h ->
-      writePixel px1 py1 (lighting hitMaterial pl point eyeV normal) ca
+      writePixel px1 py1 l ca
       where
-        hitT = t h
-        hitObject = object h
-        hitMaterial = material hitObject
+        !hitT = t h
+        !hitObject = object h
+        !hitMaterial = material hitObject
         point = rayPosition r hitT
         normal = sphereNormalAt hitObject point
         eyeV = negPoint $ direction r
+        !l = lighting hitMaterial pl point eyeV normal
     Nothing -> ca
   where
-    r = ray cr
-    px1 = px cr
-    py1 = py cr
     h = hit $ raySphereIntersect r s
     or = origin r
 
@@ -86,4 +85,4 @@ demoLight fs = do
     pixels = [(x,y) | x<-[0..(canvasBound-1)],y<-[0..(canvasBound-1)]]
     rays = map castingRayFromXY pixels
 
-    canvas2 = foldl (\ca cr -> castRay cr sphere3 pointLight ca) canvas1 rays
+    canvas2 = foldl' (\ca cr -> castRay cr sphere3 pointLight ca) canvas1 rays

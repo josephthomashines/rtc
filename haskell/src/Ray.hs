@@ -27,24 +27,22 @@ rayPosition r t =
 
 -- Get where the ray intersects the sphere
 raySphereIntersect :: Ray -> Sphere -> Intersections
-raySphereIntersect r s
+raySphereIntersect r@(Ray !o !d) s
   | discrim < 0    = []
   | otherwise      = rts
   where
-    tr1 = rayTranslate r (matrixInverse $ translate s)
-    tr = rayTransform tr1 (matrixInverse $ transform s)
-    o = origin tr
-    d = direction tr
-    s2r = subPoints o (makePoint 0 0 0)
-    a = dotPoints d d
-    b = 2 * dotPoints d s2r
-    c = (dotPoints s2r s2r) - 1
-    discrim = (b^2) - 4*a*c
-    ad = abs discrim
-    t1 = (-b - (sqrt ad)) / (2*a)
-    t2 = (-b + (sqrt ad)) / (2*a)
-    ts = sort [t1,t2]
-    rts = map (\t -> makeIntersection t s) ts
+    !tr1 = rayTranslate r (matrixInverse $ translate s)
+    !tr = rayTransform tr1 (matrixInverse $ transform s)
+    !s2r = subPoints o (makePoint 0 0 0)
+    !a = dotPoints d d
+    !b = 2 * dotPoints d s2r
+    !c = (dotPoints s2r s2r) - 1
+    !discrim = (b^2) - 4*a*c
+    !ad = abs discrim
+    !t1 = (-b - (sqrt ad)) / (2*a)
+    !t2 = (-b + (sqrt ad)) / (2*a)
+    !ts = sort [t1,t2]
+    !rts = map (\t -> makeIntersection t s) ts
 
 -- Type to track intersections
 -- TODO: Replace sphere with generic object
