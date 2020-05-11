@@ -17,7 +17,7 @@
   ck_assert(p1 != NULL);\
   ck_assert(p2 != NULL);\
   ck_assert_msg(primitives_equal(p1,p2) == 1,\
-      "\nprimitive_ts should equal, got %s = %s",to_string(p1),to_string(p2));\
+      "\nprimitive_ts should equal, got %s = %s",primitive_to_string(p1),primitive_to_string(p2));\
 }
 
 START_TEST (test_new_primitive) {

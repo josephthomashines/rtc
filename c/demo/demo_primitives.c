@@ -39,8 +39,8 @@ void primitive_demo(char* filename) {
 	char* t_pos_str; char* t_vel_str;
 	printf("Launching projectile...\n");
   while (primitive_y(p->position) >= 0) {
-		t_pos_str = to_string(p->position);
-		t_vel_str = to_string(p->velocity);
+		t_pos_str = primitive_to_string(p->position);
+		t_vel_str = primitive_to_string(p->velocity);
     printf("Position: %25s | Velocity: %25s\n",t_pos_str,t_vel_str);
 		free(t_pos_str); free(t_vel_str);
     tick(e,p);
@@ -48,7 +48,7 @@ void primitive_demo(char* filename) {
   }
 
 	p->position->values[1] = 0;
-	t_pos_str = to_string(p->position);
+	t_pos_str = primitive_to_string(p->position);
 	printf("---- Projectile crashed at %s after %d ticks ----\n", t_pos_str, tick_count);
 	free(t_pos_str);
 

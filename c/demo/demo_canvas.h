@@ -8,7 +8,6 @@
 #include "canvas.h"
 #include "primitives.h"
 
-
 void canvas_demo(char* filename);
 
 #endif

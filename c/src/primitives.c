@@ -59,7 +59,7 @@ void free_primitive(primitive_t* p) {
   return;
 }
 
-char* to_string(primitive_t* p) {
+char* primitive_to_string(primitive_t* p) {
   int BUF_SIZE = PRIMITIVE_SIZE*32;
   char* out;
 	out = calloc(1,sizeof(char)*(BUF_SIZE));
@@ -75,7 +75,7 @@ char* to_string(primitive_t* p) {
     }
   }
 
-  
+
   return out;
 }
 

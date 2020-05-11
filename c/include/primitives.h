@@ -27,7 +27,7 @@ primitive_t* new_vector(float x, float y, float z);
 int is_point(primitive_t* p);
 int is_vector(primitive_t* p);
 void free_primitive(primitive_t* p);
-char* to_string(primitive_t* p);
+char* primitive_to_string(primitive_t* p);
 int primitives_equal(primitive_t* a, primitive_t* b);
 
 primitive_t* add_primitives(primitive_t* a, primitive_t* b);
