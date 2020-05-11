@@ -20,7 +20,7 @@ class TestPrimitive(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testA(self):
+    def test_constructor(self):
         pass
 
 if __name__ == "__main__":
