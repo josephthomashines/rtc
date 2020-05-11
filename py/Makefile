@@ -3,7 +3,7 @@ SHELL=/bin/bash
 .PHONY: all clean main test
 
 clean:
-	-@rm -rf venv
+	-@rm -rf venv __pycache__
 
 venv: install.sh
 	bash install.sh
