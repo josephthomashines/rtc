@@ -16,7 +16,7 @@ type primitive struct {
 }
 
 func (p *primitive) String() string {
-	return fmt.Sprintf("( %.4f, %.4f, %.4f, %.4f )", p.x, p.y, p.z, p.w)
+	return fmt.Sprintf("( %.2f, %.2f, %.2f, %.2f )", p.x, p.y, p.z, p.w)
 }
 
 func NewPrimitive(x, y, z, w float64) *primitive {
@@ -144,17 +144,16 @@ func (a *primitive) Cross(b *primitive) (*primitive, error) {
 // ---------------------------------------------------------------------------
 // Demo
 
-type DPProjectile struct {
+type DemoProjectile struct {
 	position, velocity *primitive
 }
 
-type DPEnvironment struct {
+type DemoEnvironment struct {
 	gravity, wind *primitive
 }
 
-func DemoPrimitiveTick(env *DPEnvironment, proj *DPProjectile) {
+func DemoTick(env *DemoEnvironment, proj *DemoProjectile) {
 	tempPosition, err := proj.position.Add(proj.velocity)
-
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -163,17 +162,13 @@ func DemoPrimitiveTick(env *DPEnvironment, proj *DPProjectile) {
 	proj.position = tempPosition
 
 	tempGravity, err := env.gravity.Add(env.wind)
-
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 
 	tempVelocity, err := proj.velocity.Add(tempGravity)
-
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 
 	proj.velocity = tempVelocity
@@ -184,22 +179,21 @@ func DemoPrimitive() {
 	tempVelocity, err := NewVector(1, 1, 0).Normalize()
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 
-	proj := &DPProjectile{
+	proj := &DemoProjectile{
 		NewPoint(0, 1, 0),
 		tempVelocity,
 	}
-	env := &DPEnvironment{
+	env := &DemoEnvironment{
 		NewVector(0, -0.1, 0),
 		NewVector(-0.01, 0, 0),
 	}
 
 	for proj.position.y > 0 {
 		fmt.Println(proj.position)
-		DemoPrimitiveTick(env, proj)
+		DemoTick(env, proj)
 	}
 
 	proj.position.y = 0

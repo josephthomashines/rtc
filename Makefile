@@ -2,7 +2,7 @@
 .PHONY: clean build run test fmt
 
 clean:
-	rm -rfv raytracer
+	rm -rfv raytracer *.ppm
 
 build:
 	go build -o raytracer *.go

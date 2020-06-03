@@ -7,6 +7,7 @@ import (
 
 var demoMap = map[string]interface{}{
 	"primitive": DemoPrimitive,
+	"canvas":    DemoCanvas,
 }
 
 func main() {
