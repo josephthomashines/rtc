@@ -8,6 +8,8 @@ cabal-dev
 *.chs.h
 *.dyn_o
 *.dyn_hi
+*.ppm
+raytracer
 .hpc
 .hsenv
 .cabal-sandbox/

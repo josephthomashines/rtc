@@ -3,6 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"runtime"
+	"runtime/pprof"
+	"os"
 )
 
 var demoMap = map[string]interface{}{
@@ -10,11 +14,10 @@ var demoMap = map[string]interface{}{
 	"canvas":    DemoCanvas,
 }
 
-func main() {
+func app() {
 	fmt.Println("Ray Tracer Challenge")
 
 	demo := flag.String("demo", "", "Pick a demo to run")
-
 	flag.Parse()
 
 	if *demo != "" {
@@ -25,4 +28,34 @@ func main() {
 	}
 
 	fmt.Println("Nothing to do...")
+}
+
+
+func main() {
+	prof := false
+	if prof {
+		f, err := os.Create("cpu.prof")
+		if err != nil {
+			log.Fatal("could not create CPU profile: ", err)
+		}
+		defer f.Close()
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal("could not start CPU profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
+	}
+
+	app()
+
+	if prof {
+		f, err := os.Create("mem.prof")
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close()
+		runtime.GC() // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not write memory profile: ", err)
+		}
+	}
 }
