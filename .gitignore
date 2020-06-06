@@ -9,6 +9,7 @@ cabal-dev
 *.dyn_o
 *.dyn_hi
 *.ppm
+*.prof
 raytracer
 .hpc
 .hsenv
