@@ -5,14 +5,14 @@ clean:
 	rm -rfv raytracer *.ppm *.prof
 
 build:
-	go build -o raytracer src/*.go
+	go build -o raytracer *.go
 
 run:
 	make build
 	./raytracer
 
 test:
-	cd src/ && go test
+	go test
 
 fmt:
-	gofmt -w src/*
+	gofmt -w .
