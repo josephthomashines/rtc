@@ -19,3 +19,11 @@ func Clip(low, high, val int) int {
 	}
 	return val
 }
+
+func D2R(d float64) float64 {
+	return d * (math.Pi/180)
+}
+
+func R2D(r float64) float64 {
+	return r * (180/math.Pi)
+}

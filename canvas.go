@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -87,16 +88,14 @@ func (c *canvas) Save(filename string) error {
 	_, err = f.WriteString(s)
 	defer f.Close()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		f.Close()
 		return err
 	}
 
+	log.Printf("Saved canvas to %s\n",filename)
 	return nil
 }
-
-// ---------------------------------------------------------------------------
-// Demo
 
 func DemoCanvas() {
 	tempVelocity, err := NewVector(1, 1.8, 0).Normalize()
@@ -126,7 +125,7 @@ func DemoCanvas() {
 	}
 
 	proj.position.y = 0
-	fmt.Println(proj.position)
+	log.Println(proj.position)
 	if err := c.Save("./DemoCanvas.ppm"); err != nil {
 		panic(err)
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"testing"
 )
 
@@ -25,5 +26,19 @@ func TestClip(t *testing.T) {
 	}
 	if Clip(low,high,0) != 1 {
 		t.Error("Clipped value incorrectly")
+	}
+}
+
+func TestRadianConversion(t *testing.T) {
+	d := 180.0
+
+	if D2R(d) != math.Pi {
+		t.Error("D2R incorrect")
+	}
+
+	r := math.Pi/2
+
+	if R2D(r) != 90.0 {
+		t.Error("R2D incorrect")
 	}
 }

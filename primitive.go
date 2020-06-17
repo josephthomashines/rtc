@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 )
 
@@ -155,7 +156,7 @@ type DemoEnvironment struct {
 func DemoTick(env *DemoEnvironment, proj *DemoProjectile) {
 	tempPosition, err := proj.position.Add(proj.velocity)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
@@ -192,10 +193,10 @@ func DemoPrimitive() {
 	}
 
 	for proj.position.y > 0 {
-		fmt.Println(proj.position)
+		log.Println(proj.position)
 		DemoTick(env, proj)
 	}
 
 	proj.position.y = 0
-	fmt.Println(proj.position)
+	log.Println(proj.position)
 }
