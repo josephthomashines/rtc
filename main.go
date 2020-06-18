@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"runtime"
 	"runtime/pprof"
-	"os"
 )
 
 var demoMap = map[string]interface{}{
@@ -30,7 +30,6 @@ func app() {
 
 	fmt.Println("Nothing to do...")
 }
-
 
 func main() {
 	prof := false

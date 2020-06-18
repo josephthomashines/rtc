@@ -93,17 +93,13 @@ func (c *canvas) Save(filename string) error {
 		return err
 	}
 
-	log.Printf("Saved canvas to %s\n",filename)
+	log.Printf("Saved canvas to %s\n", filename)
 	return nil
 }
 
 func DemoCanvas() {
-	tempVelocity, err := NewVector(1, 1.8, 0).Normalize()
+	tempVelocity := NewVector(1, 1.8, 0).Normalize()
 	tempVelocity = tempVelocity.Scale(11.25)
-
-	if err != nil {
-		panic(err)
-	}
 
 	proj := &DemoProjectile{
 		NewPoint(0, 1, 0),

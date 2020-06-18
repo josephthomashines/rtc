@@ -51,9 +51,9 @@ func (p *primitive) IsVector() bool {
 	return p.w == VECTOR_W
 }
 
-func (a *primitive) Add(b *primitive) (*primitive, error) {
+func (a *primitive) Add(b *primitive) *primitive {
 	if a.IsPoint() && b.IsPoint() {
-		return nil, fmt.Errorf("Cannot Add %s and %s, both are points", a, b)
+		panic(fmt.Errorf("Cannot Add %s and %s, both are points", a, b))
 	}
 
 	p := NewPrimitive(
@@ -62,12 +62,12 @@ func (a *primitive) Add(b *primitive) (*primitive, error) {
 		a.z+b.z,
 		a.w+b.w,
 	)
-	return p, nil
+	return p
 }
 
-func (a *primitive) Sub(b *primitive) (*primitive, error) {
+func (a *primitive) Sub(b *primitive) *primitive {
 	if a.IsVector() && b.IsPoint() {
-		return nil, fmt.Errorf("Cannot Add %s and %s, both are points", a, b)
+		panic(fmt.Errorf("Cannot Add %s and %s, both are points", a, b))
 	}
 
 	p := NewPrimitive(
@@ -76,7 +76,7 @@ func (a *primitive) Sub(b *primitive) (*primitive, error) {
 		a.z-b.z,
 		a.w-b.w,
 	)
-	return p, nil
+	return p
 }
 
 func (p *primitive) Scale(s float64) *primitive {
@@ -92,9 +92,9 @@ func (p *primitive) Negate() *primitive {
 	return p.Scale(-1)
 }
 
-func (p *primitive) Magnitude() (float64, error) {
+func (p *primitive) Magnitude() float64 {
 	if !p.IsVector() {
-		return 0, fmt.Errorf("Only vectors have magnitude")
+		panic(fmt.Errorf("Only vectors have magnitude"))
 	}
 
 	m := math.Sqrt(
@@ -103,22 +103,18 @@ func (p *primitive) Magnitude() (float64, error) {
 			(p.z * p.z) +
 			(p.w * p.w))
 
-	return m, nil
+	return m
 }
 
-func (p *primitive) Normalize() (*primitive, error) {
-	mag, err := p.Magnitude()
+func (p *primitive) Normalize() *primitive {
+	mag := p.Magnitude()
 
-	if err != nil {
-		return nil, err
-	}
-
-	return p.Scale(1. / mag), nil
+	return p.Scale(1. / mag)
 }
 
-func (a *primitive) Dot(b *primitive) (float64, error) {
+func (a *primitive) Dot(b *primitive) float64 {
 	if !(a.IsVector() && b.IsVector()) {
-		return 0, fmt.Errorf("Can only get dot product of vectors")
+		panic(fmt.Errorf("Can only get dot product of vectors"))
 	}
 
 	d := (a.x * b.x) +
@@ -126,12 +122,12 @@ func (a *primitive) Dot(b *primitive) (float64, error) {
 		(a.z * b.z) +
 		(a.w * b.w)
 
-	return d, nil
+	return d
 }
 
-func (a *primitive) Cross(b *primitive) (*primitive, error) {
+func (a *primitive) Cross(b *primitive) *primitive {
 	if !(a.IsVector() && b.IsVector()) {
-		return nil, fmt.Errorf("Can only get dot product of vectors")
+		panic(fmt.Errorf("Can only get dot product of vectors"))
 	}
 
 	p := NewVector(
@@ -139,7 +135,7 @@ func (a *primitive) Cross(b *primitive) (*primitive, error) {
 		(a.z*b.x)-(a.x*b.z),
 		(a.x*b.y)-(a.y*b.x),
 	)
-	return p, nil
+	return p
 }
 
 // ---------------------------------------------------------------------------
@@ -154,34 +150,18 @@ type DemoEnvironment struct {
 }
 
 func DemoTick(env *DemoEnvironment, proj *DemoProjectile) {
-	tempPosition, err := proj.position.Add(proj.velocity)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
+	tempPosition := proj.position.Add(proj.velocity)
 	proj.position = tempPosition
 
-	tempGravity, err := env.gravity.Add(env.wind)
-	if err != nil {
-		panic(err)
-	}
-
-	tempVelocity, err := proj.velocity.Add(tempGravity)
-	if err != nil {
-		panic(err)
-	}
-
+	tempGravity := env.gravity.Add(env.wind)
+	tempVelocity := proj.velocity.Add(tempGravity)
 	proj.velocity = tempVelocity
+
 	return
 }
 
 func DemoPrimitive() {
-	tempVelocity, err := NewVector(1, 1, 0).Normalize()
-
-	if err != nil {
-		panic(err)
-	}
+	tempVelocity := NewVector(1, 1, 0).Normalize()
 
 	proj := &DemoProjectile{
 		NewPoint(0, 1, 0),

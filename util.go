@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	guuid "github.com/google/uuid"
 )
 
 var EPSILON float64 = 1e-5
@@ -21,9 +22,13 @@ func Clip(low, high, val int) int {
 }
 
 func D2R(d float64) float64 {
-	return d * (math.Pi/180)
+	return d * (math.Pi / 180)
 }
 
 func R2D(r float64) float64 {
-	return r * (180/math.Pi)
+	return r * (180 / math.Pi)
+}
+
+func UUID() string {
+	return guuid.New().String()
 }

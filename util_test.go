@@ -9,7 +9,7 @@ func TestFloatEquals(t *testing.T) {
 	a := 1.0
 	b := a - EPSILON
 
-	if !FloatEquals(a,b) {
+	if !FloatEquals(a, b) {
 		t.Error("FloatEquals failed")
 	}
 }
@@ -18,13 +18,13 @@ func TestClip(t *testing.T) {
 	low := 1
 	high := 3
 
-	if Clip(low,high,2) != 2 {
+	if Clip(low, high, 2) != 2 {
 		t.Error("Clipped value incorrectly")
 	}
-	if Clip(low,high,10) != 3 {
+	if Clip(low, high, 10) != 3 {
 		t.Error("Clipped value incorrectly")
 	}
-	if Clip(low,high,0) != 1 {
+	if Clip(low, high, 0) != 1 {
 		t.Error("Clipped value incorrectly")
 	}
 }
@@ -36,7 +36,7 @@ func TestRadianConversion(t *testing.T) {
 		t.Error("D2R incorrect")
 	}
 
-	r := math.Pi/2
+	r := math.Pi / 2
 
 	if R2D(r) != 90.0 {
 		t.Error("R2D incorrect")

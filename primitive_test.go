@@ -1,4 +1,4 @@
-package main
+ package main
 
 import (
 	"math"
@@ -41,11 +41,7 @@ func TestNewPrimitive(t *testing.T) {
 func TestAddPrimitives(t *testing.T) {
 	a1 := NewPrimitive(3, -2, 5, 1)
 	a2 := NewPrimitive(-2, 3, 1, 0)
-	res, err := a1.Add(a2)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res := a1.Add(a2)
 
 	exp := NewPrimitive(1, 1, 6, 1)
 	if !res.Equals(exp) {
@@ -54,21 +50,12 @@ func TestAddPrimitives(t *testing.T) {
 
 	a1 = NewPoint(1, 2, 3)
 	a2 = NewPoint(1, 2, 3)
-	_, err = a1.Add(a2)
-
-	if err == nil {
-		t.Error("Should error when Adding points")
-	}
 }
 
 func TestSubPrimitives(t *testing.T) {
 	p1 := NewPoint(3, 2, 1)
 	p2 := NewPoint(5, 6, 7)
-	res, err := p1.Sub(p2)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res := p1.Sub(p2)
 
 	exp := NewVector(-2, -4, -6)
 	if !res.Equals(exp) {
@@ -77,11 +64,7 @@ func TestSubPrimitives(t *testing.T) {
 
 	p := p1
 	v := NewVector(5, 6, 7)
-	res, err = p.Sub(v)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = p.Sub(v)
 
 	exp = NewPoint(-2, -4, -6)
 	if !res.Equals(exp) {
@@ -90,21 +73,12 @@ func TestSubPrimitives(t *testing.T) {
 
 	v1 := NewVector(3, 2, 1)
 	v2 := v
-	res, err = v1.Sub(v2)
+	res = v1.Sub(v2)
 
 	exp = NewVector(-2, -4, -6)
-	if err != nil {
-		t.Error(err)
-	}
 
 	if !res.Equals(exp) {
 		t.Errorf("%s - %s should be %s, got %s", p1, p2, exp, res)
-	}
-
-	_, err = v.Sub(p)
-
-	if err == nil {
-		t.Error("Should error when vector - point")
 	}
 }
 
@@ -137,55 +111,35 @@ func TestNegatePrimitive(t *testing.T) {
 
 func TestMagnitudeVector(t *testing.T) {
 	v := NewVector(1, 0, 0)
-	res, err := v.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	res := v.Magnitude()
 
 	if res != 1 {
 		t.Error("Magnitude incorrectly calculated")
 	}
 
 	v = NewVector(0, 1, 0)
-	res, err = v.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = v.Magnitude()
 
 	if res != 1 {
 		t.Error("Magnitude incorrectly calculated")
 	}
 
 	v = NewVector(0, 0, 1)
-	res, err = v.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = v.Magnitude()
 
 	if res != 1 {
 		t.Error("Magnitude incorrectly calculated")
 	}
 
 	v = NewVector(1, 2, 3)
-	res, err = v.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = v.Magnitude()
 
 	if res != math.Sqrt(14) {
 		t.Error("Magnitude incorrectly calculated")
 	}
 
 	v = NewVector(-1, -2, -3)
-	res, err = v.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = v.Magnitude()
 
 	if res != math.Sqrt(14) {
 		t.Error("Magnitude incorrectly calculated")
@@ -194,11 +148,7 @@ func TestMagnitudeVector(t *testing.T) {
 
 func TestNormalizePrimitive(t *testing.T) {
 	v := NewVector(4, 0, 0)
-	normV, err := v.Normalize()
-
-	if err != nil {
-		t.Error(err)
-	}
+	normV := v.Normalize()
 
 	exp := NewVector(1, 0, 0)
 	if !normV.Equals(exp) {
@@ -206,11 +156,7 @@ func TestNormalizePrimitive(t *testing.T) {
 	}
 
 	v = NewVector(1, 2, 3)
-	normV, err = v.Normalize()
-
-	if err != nil {
-		t.Error(err)
-	}
+	normV = v.Normalize()
 
 	root14 := math.Sqrt(14)
 	exp = NewVector(1/root14, 2/root14, 3/root14)
@@ -218,11 +164,7 @@ func TestNormalizePrimitive(t *testing.T) {
 		t.Error("Normal incorrectly calculated")
 	}
 
-	mag, err := normV.Magnitude()
-
-	if err != nil {
-		t.Error(err)
-	}
+	mag := normV.Magnitude()
 
 	if mag != 1 {
 		t.Error("Normal incorrectly calculated")
@@ -232,11 +174,7 @@ func TestNormalizePrimitive(t *testing.T) {
 func TestDotPrimitive(t *testing.T) {
 	a := NewVector(1, 2, 3)
 	b := NewVector(2, 3, 4)
-	res, err := a.Dot(b)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res := a.Dot(b)
 
 	if res != 20 {
 		t.Error("Dot product calculated incorrectly")
@@ -246,22 +184,14 @@ func TestDotPrimitive(t *testing.T) {
 func TestCrossPrimitive(t *testing.T) {
 	a := NewVector(1, 2, 3)
 	b := NewVector(2, 3, 4)
-	res, err := a.Cross(b)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res := a.Cross(b)
 
 	exp := NewVector(-1, 2, -1)
 	if !res.Equals(exp) {
 		t.Error("Cross product calculated incorrectly")
 	}
 
-	res, err = b.Cross(a)
-
-	if err != nil {
-		t.Error(err)
-	}
+	res = b.Cross(a)
 
 	exp = NewVector(1, -2, 1)
 	if !res.Equals(exp) {
