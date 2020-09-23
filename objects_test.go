@@ -68,7 +68,7 @@ func TestRayIntersect(t *testing.T) {
 	}
 
 	r := NewRay(NewPoint(0,0,-5),NewVector(0,0,1))
-	s.transform = NewScaling(2,2,2)
+	s.transform = Transform(Scale(2,2,2))
 	xs := r.IntersectSphere(s)
 
 	if len(xs) != 2 ||
@@ -77,7 +77,7 @@ func TestRayIntersect(t *testing.T) {
 			 t.Error("Ray sphere incorrect when sphere scaled")
 	}
 
-	s.transform = NewTranslation(5,0,0)
+	s.transform = Transform(Translate(5,0,0))
 	xs = r.IntersectSphere(s)
 
 	if len(xs) != 0 {
@@ -149,7 +149,7 @@ func TestHit(t *testing.T) {
 
 func TestRayTransform(t *testing.T) {
 	r := NewRay(NewPoint(1,2,3),NewVector(0,1,0))
-	m := NewTranslation(3,4,5)
+	m := Transform(Translate(3,4,5))
 	tr := r.Transform(m)
 	exp := NewRay(NewPoint(4,6,8),NewVector(0,1,0))
 
@@ -158,7 +158,7 @@ func TestRayTransform(t *testing.T) {
 		t.Error("Cannot properly ray transform")
 	}
 
-	m = NewScaling(2,3,4)
+	m = Transform(Scale(2,3,4))
 	tr = r.Transform(m)
 	exp = NewRay(NewPoint(2,6,12),NewVector(0,3,0))
 
@@ -175,7 +175,7 @@ func TestSphere(t *testing.T) {
 		t.Error("Sphere transform not initialized correctly")
 	}
 
-	tr := NewTranslation(2,3,4)
+	tr := Transform(Translate(2,3,4))
 	s.transform = tr
 
 	if !s.transform.Equals(tr) {

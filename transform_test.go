@@ -6,7 +6,7 @@ import (
 )
 
 func TestTranslation(t *testing.T) {
-	tr := NewTranslation(5, -3, 2)
+    tr := Transform(Translate(5, -3, 2))
 	p := NewPoint(-3, 4, 5)
 	exp := NewPoint(2, 1, 7)
 
@@ -29,7 +29,7 @@ func TestTranslation(t *testing.T) {
 }
 
 func TestScaling(t *testing.T) {
-	tr := NewScaling(2, 3, 4)
+    tr := Transform(Scale(2, 3, 4))
 	p := NewPoint(-4, 6, 8)
 	exp := NewPoint(-8, 18, 32)
 
@@ -51,7 +51,7 @@ func TestScaling(t *testing.T) {
 		t.Error("Scaling matrix incorrect")
 	}
 
-	tr = NewScaling(-1, 1, 1)
+	tr = Transform(Scale(-1, 1, 1))
 	p = NewPoint(2, 3, 4)
 	exp = NewPoint(-2, 3, 4)
 
@@ -66,8 +66,8 @@ func TestRotation(t *testing.T) {
 
 	// RotationX
 	p := NewPoint(0, 1, 0)
-	hq := NewRotationX(math.Pi / 4)
-	fq := NewRotationX(math.Pi / 2)
+	hq := Transform(RotateX(math.Pi / 4))
+	fq := Transform(RotateX(math.Pi / 2))
 	ehq := NewPoint(0, r2o2, r2o2)
 	efq := NewPoint(0, 0, 1)
 
@@ -85,8 +85,8 @@ func TestRotation(t *testing.T) {
 
 	// RotationY
 	p = NewPoint(0, 0, 1)
-	hq = NewRotationY(math.Pi / 4)
-	fq = NewRotationY(math.Pi / 2)
+	hq = Transform(RotateY(math.Pi / 4))
+	fq = Transform(RotateY(math.Pi / 2))
 	ehq = NewPoint(r2o2, 0, r2o2)
 	efq = NewPoint(1, 0, 0)
 
@@ -97,8 +97,8 @@ func TestRotation(t *testing.T) {
 
 	// RotationZ
 	p = NewPoint(0, 1, 0)
-	hq = NewRotationZ(math.Pi / 4)
-	fq = NewRotationZ(math.Pi / 2)
+	hq = Transform(RotateZ(math.Pi / 4))
+	fq = Transform(RotateZ(math.Pi / 2))
 	ehq = NewPoint(-r2o2, r2o2, 0)
 	efq = NewPoint(-1, 0, 0)
 
@@ -111,12 +111,12 @@ func TestRotation(t *testing.T) {
 func TestShearing(t *testing.T) {
 	p := NewPoint(2, 3, 4)
 	trs := []*matrix{
-		NewShearing(1, 0, 0, 0, 0, 0),
-		NewShearing(0, 1, 0, 0, 0, 0),
-		NewShearing(0, 0, 1, 0, 0, 0),
-		NewShearing(0, 0, 0, 1, 0, 0),
-		NewShearing(0, 0, 0, 0, 1, 0),
-		NewShearing(0, 0, 0, 0, 0, 1),
+		Transform(Shear(1, 0, 0, 0, 0, 0)),
+		Transform(Shear(0, 1, 0, 0, 0, 0)),
+		Transform(Shear(0, 0, 1, 0, 0, 0)),
+		Transform(Shear(0, 0, 0, 1, 0, 0)),
+		Transform(Shear(0, 0, 0, 0, 1, 0)),
+		Transform(Shear(0, 0, 0, 0, 0, 1)),
 	}
 	exps := []*primitive{
 		NewPoint(5, 3, 4),
@@ -136,9 +136,9 @@ func TestShearing(t *testing.T) {
 
 func TestChainingTransformation(t *testing.T) {
 	p := NewPoint(1, 0, 1)
-	A := NewRotationX(math.Pi / 2)
-	B := NewScaling(5, 5, 5)
-	C := NewTranslation(10, 5, 7)
+    A := Transform(RotateX(math.Pi / 2))
+    B := Transform(Scale(5,5,5))
+    C := Transform(Translate(10,5,7))
 
 	p2 := A.MultiplyPrimitive(p)
 	if !p2.Equals(NewPoint(1, -1, 0)) {
@@ -158,4 +158,10 @@ func TestChainingTransformation(t *testing.T) {
 	if !p5.Equals(NewPoint(15, 0, 7)) {
 		t.Error("Chaining transformations incorrect")
 	}
+
+    T = Transform(RotateX(math.Pi / 2), Scale(5,5,5), Translate(10,5,7))
+	if !p5.Equals(NewPoint(15, 0, 7)) {
+		t.Error("Chaining transformations API incorrect")
+	}
 }
+
