@@ -6,7 +6,7 @@ import (
 )
 
 func TestTranslation(t *testing.T) {
-    tr := Transform(Translate(5, -3, 2))
+	tr := Transform(Translate(5, -3, 2))
 	p := NewPoint(-3, 4, 5)
 	exp := NewPoint(2, 1, 7)
 
@@ -29,7 +29,7 @@ func TestTranslation(t *testing.T) {
 }
 
 func TestScaling(t *testing.T) {
-    tr := Transform(Scale(2, 3, 4))
+	tr := Transform(Scale(2, 3, 4))
 	p := NewPoint(-4, 6, 8)
 	exp := NewPoint(-8, 18, 32)
 
@@ -136,9 +136,9 @@ func TestShearing(t *testing.T) {
 
 func TestChainingTransformation(t *testing.T) {
 	p := NewPoint(1, 0, 1)
-    A := Transform(RotateX(math.Pi / 2))
-    B := Transform(Scale(5,5,5))
-    C := Transform(Translate(10,5,7))
+	A := Transform(RotateX(math.Pi / 2))
+	B := Transform(Scale(5, 5, 5))
+	C := Transform(Translate(10, 5, 7))
 
 	p2 := A.MultiplyPrimitive(p)
 	if !p2.Equals(NewPoint(1, -1, 0)) {
@@ -159,9 +159,8 @@ func TestChainingTransformation(t *testing.T) {
 		t.Error("Chaining transformations incorrect")
 	}
 
-    T = Transform(RotateX(math.Pi / 2), Scale(5,5,5), Translate(10,5,7))
+	T = Transform(RotateX(math.Pi/2), Scale(5, 5, 5), Translate(10, 5, 7))
 	if !p5.Equals(NewPoint(15, 0, 7)) {
 		t.Error("Chaining transformations API incorrect")
 	}
 }
-

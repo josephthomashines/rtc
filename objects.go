@@ -6,11 +6,11 @@ import (
 )
 
 type ray struct {
-	origin *primitive
+	origin    *primitive
 	direction *primitive
 }
 
-func NewRay(o,d *primitive) *ray {
+func NewRay(o, d *primitive) *ray {
 	if !o.IsPoint() {
 		panic("Origin must be point")
 	}
@@ -20,7 +20,7 @@ func NewRay(o,d *primitive) *ray {
 	}
 
 	return &ray{
-		origin: o,
+		origin:    o,
 		direction: d,
 	}
 }
@@ -34,20 +34,20 @@ func (r *ray) Position(t float64) *primitive {
 func (r *ray) IntersectSphere(s *sphere) []*intersection {
 	r2 := r.Transform(s.transform.Inverse())
 
-	sphereToRay := r2.origin.Sub(NewPoint(0,0,0))
+	sphereToRay := r2.origin.Sub(NewPoint(0, 0, 0))
 	a := r2.direction.Dot(r2.direction)
 	b := 2 * r2.direction.Dot(sphereToRay)
 	c := sphereToRay.Dot(sphereToRay) - 1
-	disc := math.Pow(b,2) - 4 * a * c
+	disc := math.Pow(b, 2) - 4*a*c
 
 	if disc < 0 {
 		return []*intersection{}
 	}
 
-	t1 := (-b - math.Sqrt(disc)) / (2*a)
-	t2 := (-b + math.Sqrt(disc)) / (2*a)
+	t1 := (-b - math.Sqrt(disc)) / (2 * a)
+	t2 := (-b + math.Sqrt(disc)) / (2 * a)
 
-	return Intersections(NewIntersection(t1,s),NewIntersection(t2,s))
+	return Intersections(NewIntersection(t1, s), NewIntersection(t2, s))
 }
 
 func (r *ray) Transform(tr *matrix) *ray {
@@ -62,13 +62,13 @@ type object interface {
 }
 
 type sphere struct {
-	id string
+	id        string
 	transform *matrix
 }
 
 func NewSphere() *sphere {
 	return &sphere{
-		id: UUID(),
+		id:        UUID(),
 		transform: NewIdentityMatrix(4),
 	}
 }
@@ -78,13 +78,13 @@ func (s *sphere) GetId() string {
 }
 
 type intersection struct {
-	t float64
+	t   float64
 	obj object
 }
 
 func NewIntersection(t float64, obj object) *intersection {
 	return &intersection{
-		t: t,
+		t:   t,
 		obj: obj,
 	}
 }
@@ -105,5 +105,3 @@ func Hit(xs []*intersection) *intersection {
 
 	return nil
 }
-
-

@@ -85,13 +85,13 @@ func DemoTransform() {
 	R := float64(S) * 3. / 8.
 	c := NewCanvas(int(S), int(S))
 	col := NewColor(1, 1, 0)
-    p := NewPoint(0, 0, 1)
+	p := NewPoint(0, 0, 1)
 
 	for i := 0; i < 12; i++ {
 		tr := Transform(
 			RotateY(float64(i)*math.Pi/6),
-            Scale(R, 1, R),
-            Translate(S/2, 0, S/2),
+			Scale(R, 1, R),
+			Translate(S/2, 0, S/2),
 		)
 
 		np := tr.MultiplyPrimitive(p)

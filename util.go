@@ -1,8 +1,8 @@
 package main
 
 import (
-	"math"
 	guuid "github.com/google/uuid"
+	"math"
 )
 
 var EPSILON float64 = 1e-5
