@@ -13,6 +13,7 @@ var demoMap = map[string]interface{}{
 	"primitive": DemoPrimitive,
 	"canvas":    DemoCanvas,
 	"transform": DemoTransform,
+	"ray":       DemoRay,
 }
 
 func app() {

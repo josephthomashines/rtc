@@ -87,7 +87,7 @@ func DemoTransform() {
 	col := NewColor(1, 1, 0)
 	p := NewPoint(0, 0, 1)
 
-	for i := 0; i < 12; i++ {
+	for i := 0; i < 3; i++ {
 		tr := Transform(
 			RotateY(float64(i)*math.Pi/6),
 			Scale(R, 1, R),

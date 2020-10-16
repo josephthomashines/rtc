@@ -105,3 +105,34 @@ func Hit(xs []*intersection) *intersection {
 
 	return nil
 }
+
+func DemoRay() {
+	rayOrigin := NewPoint(0, 0, -5)
+	wallZ := 10.0
+	wallSize := 7.0
+	canvasPixels := 500
+	pixelSize := wallSize / float64(canvasPixels)
+	half := wallSize / 2
+	ca := NewCanvas(canvasPixels, canvasPixels)
+	co := NewColor(1, 0, 0)
+	shape := NewSphere()
+	// t := Transform(Scale(0.5, 1, 1))
+	// shape.transform = t
+
+	for y := 0; y < canvasPixels; y++ {
+		worldY := half - pixelSize*float64(y)
+		for x := 0; x < canvasPixels; x++ {
+			worldX := -half + pixelSize*float64(x)
+			position := NewPoint(worldX, worldY, wallZ)
+
+			r := NewRay(rayOrigin, position.Sub(rayOrigin).Normalize())
+			xs := r.IntersectSphere(shape)
+
+			if Hit(xs) != nil {
+				ca.WritePixel(x, y, co)
+			}
+		}
+	}
+
+	ca.Save("./DemoRay.ppm")
+}
