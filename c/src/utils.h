@@ -1,5 +1,7 @@
 #pragma ONCE
 
+#include <assert.h>
+
 #define T double
 
 #define ERR( fmt, ... ) \
@@ -25,3 +27,9 @@
 #define CLIP( x, a, b ) \
 	(IS_BETWEEN((x), (a), (b)) ? (x) : (x) < (a) ? (a) : (b))
 
+#define START_TESTS() int TEST_COUNT = 0;
+
+#define ASSERT( b ) {\
+	assert(b);\
+	TEST_COUNT++;\
+}

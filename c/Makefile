@@ -1,12 +1,11 @@
 CC=gcc
 FLAGS=-g -lm
 
-%: %.c src/*.{c,h}
-	$(CC) -o $* $*.c src/*.c $(FLAGS)
+main: src/* main.c
+	$(CC) -o main main.c src/*.c $(FLAGS)
 
-main:
-
-test:
+test: src/* test.c
+	$(CC) -o test test.c src/*.c $(FLAGS)
 
 # EXEC=./main make val
 val:
