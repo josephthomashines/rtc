@@ -1,11 +1,17 @@
 CC=gcc
 FLAGS=-g -lm
 
-main: src/* main.c
-	$(CC) -o main main.c src/*.c $(FLAGS)
+bin/main: src/* main.c bin
+	$(CC) -o bin/main main.c src/*.c $(FLAGS)
 
-test: src/* test.c
-	$(CC) -o test test.c src/*.c $(FLAGS)
+bin/test: src/* test.c bin
+	$(CC) -o bin/test test.c src/*.c $(FLAGS)
+
+bin:
+	mkdir -p bin
+
+clean:
+	rm -rfv bin
 
 # EXEC=./main make val
 val:
